@@ -13,6 +13,7 @@
         <item name="android:textColorPrimary">@color/text_on_light</item>
         <item name="android:textColorSecondary">@color/text_hint_light</item>
         <item name="colorDestructive">@color/color_delete_light</item>
+        <item name="isLightTheme">true</item>
     </style>
 
     <!-- Dark Theme -->
@@ -29,6 +30,7 @@
         <item name="android:textColorPrimary">@color/text_on_dark</item>
         <item name="android:textColorSecondary">@color/text_hint_dark</item>
         <item name="colorDestructive">@color/color_delete_dark</item>
+        <item name="isLightTheme">false</item>
     </style>
 
     <style name="Theme.IAACBD" parent="Theme.IAACBD.Light" />
