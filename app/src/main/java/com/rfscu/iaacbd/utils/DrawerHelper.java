@@ -74,13 +74,18 @@ public class DrawerHelper {
         if (ivDarkModeToggle == null) return;
 
         SharedPreferences prefs = activity.getSharedPreferences("app_prefs", Context.MODE_PRIVATE);
-        boolean isDarkMode = prefs.getBoolean("dark_mode", false);
+        String currentTheme = prefs.getString("app_theme", "light");
+        boolean isDarkMode = "dark".equals(currentTheme);
         updateThemeIcon(ivDarkModeToggle, isDarkMode);
 
         ivDarkModeToggle.setOnClickListener(v -> {
-            boolean newDarkModeState = !prefs.getBoolean("dark_mode", false);
-            prefs.edit().putBoolean("dark_mode", newDarkModeState).apply();
-            updateThemeIcon(ivDarkModeToggle, newDarkModeState);
+            String theme = prefs.getString("app_theme", "light");
+            String newTheme = "light".equals(theme) ? "dark" : "light";
+            
+            prefs.edit().putString("app_theme", newTheme).apply();
+            
+            // Recreate activity to apply new theme immediately
+            activity.recreate();
         });
     }
 
