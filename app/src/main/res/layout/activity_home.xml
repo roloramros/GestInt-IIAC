@@ -104,7 +104,7 @@
                     android:baselineAligned="false"
                     android:layout_marginBottom="16dp">
 
-                    <!-- Card: Listado -->                                                                                                               
+                    <!-- Card: Listado -->
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/cardListado"
                         android:layout_width="0dp"
