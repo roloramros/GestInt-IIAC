@@ -1,4 +1,7 @@
 <resources>
+    <!-- Default theme for night mode -->
+    <style name="Theme.IAACBD" parent="Theme.IAACBD.Dark" />
+
     <style name="Theme.IAACBD.Dark" parent="Theme.Material3.Dark.NoActionBar">
         <item name="colorPrimary">@color/green_primary_dark</item>
         <item name="colorSecondary">@color/green_secondary</item>

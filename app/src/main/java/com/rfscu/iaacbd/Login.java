@@ -13,11 +13,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.rfscu.iaacbd.utils.ThemeBaseActivity;
 
-public class Login extends AppCompatActivity {
+public class Login extends ThemeBaseActivity {
 
     private TextInputEditText etUsuario, etPassword;
     private MaterialButton btnEntrar;

@@ -29,6 +29,7 @@ import com.rfscu.iaacbd.api.RetrofitClient;
 import com.rfscu.iaacbd.model.User;
 import com.rfscu.iaacbd.model.UserRequest;
 import com.rfscu.iaacbd.utils.DrawerHelper;
+import com.rfscu.iaacbd.utils.ThemeBaseActivity;
 import com.rfscu.iaacbd.utils.TokenManager;
 
 import java.util.List;
@@ -37,7 +38,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class UserManagementActivity extends AppCompatActivity implements UserAdapter.OnUserActionListener {
+public class UserManagementActivity extends ThemeBaseActivity implements UserAdapter.OnUserActionListener {
 
     private RecyclerView rvUsers;
     private MaterialButton btnAddUser;

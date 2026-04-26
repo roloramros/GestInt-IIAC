@@ -20,11 +20,12 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.navigation.NavigationView;
 import com.rfscu.iaacbd.utils.DrawerHelper;
+import com.rfscu.iaacbd.utils.ThemeBaseActivity;
 import com.rfscu.iaacbd.utils.TokenManager;
 
 import java.util.Calendar;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends ThemeBaseActivity {
 
     private DrawerLayout drawerLayout;
     private NavigationView navView;

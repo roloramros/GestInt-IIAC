@@ -32,6 +32,7 @@ import com.rfscu.iaacbd.model.InstrumentoCreateRequest;
 import com.rfscu.iaacbd.model.InstrumentoUpdateRequest;
 import com.rfscu.iaacbd.utils.DrawerHelper;
 import com.rfscu.iaacbd.utils.InstrumentoFormDialog;
+import com.rfscu.iaacbd.utils.ThemeBaseActivity;
 import com.rfscu.iaacbd.utils.TokenManager;
 
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements InstrumentoFormDialog.FormCallback {
+public class MainActivity extends ThemeBaseActivity implements InstrumentoFormDialog.FormCallback {
 
     private static final int REQUEST_DETAIL = 101;
 

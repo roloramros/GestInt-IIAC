@@ -28,6 +28,7 @@ import com.rfscu.iaacbd.adapter.InstrumentoAdapter;
 import com.rfscu.iaacbd.api.RetrofitClient;
 import com.rfscu.iaacbd.model.Instrumento;
 import com.rfscu.iaacbd.utils.DrawerHelper;
+import com.rfscu.iaacbd.utils.ThemeBaseActivity;
 import com.rfscu.iaacbd.utils.TokenManager;
 
 import android.widget.Button;
@@ -41,7 +42,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AdvancedSearchActivity extends AppCompatActivity {
+public class AdvancedSearchActivity extends ThemeBaseActivity {
 
     private CheckBox cbPlanta, cbInstrumento, cbTarjeta, cbDirIm, cbDirPa, cbVarMedida, cbComunicacion;
     private Spinner spPlanta, spInstrumento, spVarMedida, spComunicacion;

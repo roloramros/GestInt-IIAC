@@ -22,13 +22,14 @@ import com.rfscu.iaacbd.model.InstrumentoCreateRequest;
 import com.rfscu.iaacbd.model.InstrumentoUpdateRequest;
 import com.rfscu.iaacbd.utils.DrawerHelper;
 import com.rfscu.iaacbd.utils.InstrumentoFormDialog;
+import com.rfscu.iaacbd.utils.ThemeBaseActivity;
 import com.rfscu.iaacbd.utils.TokenManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class InstrumentoDetailActivity extends AppCompatActivity implements InstrumentoFormDialog.FormCallback {
+public class InstrumentoDetailActivity extends ThemeBaseActivity implements InstrumentoFormDialog.FormCallback {
 
     private Instrumento instrumento;
     private TextView tvLastUpdate;
