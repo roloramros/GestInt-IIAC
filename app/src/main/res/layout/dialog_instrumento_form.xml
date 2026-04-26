@@ -17,7 +17,7 @@
             android:text="@string/add_instrument"
             android:textSize="22sp"
             android:textStyle="bold"
-            android:textColor="@color/green_primary"
+            android:textColor="?attr/colorPrimary"
             android:gravity="center"
             android:layout_marginBottom="24dp"/>
 
@@ -28,13 +28,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/tag_hint"
-            app:boxStrokeColor="@color/green_primary"
+            app:boxStrokeColor="?attr/colorPrimary"
             android:layout_marginBottom="12dp">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etTag"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textCapCharacters"/>
+                android:inputType="textCapCharacters"
+                android:textColor="?android:attr/textColorPrimary"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -43,13 +44,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/planta_hint"
-            app:boxStrokeColor="@color/green_primary"
+            app:boxStrokeColor="?attr/colorPrimary"
             android:layout_marginBottom="12dp">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etPlanta"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"/>
+                android:inputType="text"
+                android:textColor="?android:attr/textColorPrimary"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -58,13 +60,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/instrumento_hint"
-            app:boxStrokeColor="@color/green_primary"
+            app:boxStrokeColor="?attr/colorPrimary"
             android:layout_marginBottom="12dp">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etInstrumento"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"/>
+                android:inputType="text"
+                android:textColor="?android:attr/textColorPrimary"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -73,13 +76,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/tarjeta_hint"
-            app:boxStrokeColor="@color/green_primary"
+            app:boxStrokeColor="?attr/colorPrimary"
             android:layout_marginBottom="16dp">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etTarjeta"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"/>
+                android:inputType="text"
+                android:textColor="?android:attr/textColorPrimary"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- TOGGLE AVANZADO -->
@@ -91,7 +95,7 @@
             android:gravity="center_vertical"
             android:clickable="true"
             android:focusable="true"
-            android:background="?attr/selectableItemBackground"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="8dp"
             android:layout_marginBottom="8dp">
             <TextView
@@ -99,7 +103,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/show_advanced"
-                android:textColor="@color/green_primary"
+                android:textColor="?attr/colorPrimary"
                 android:textStyle="bold"/>
         </LinearLayout>
 
@@ -389,7 +393,7 @@
                 android:layout_weight="1"
                 android:text="@string/save"
                 app:cornerRadius="28dp"
-                android:backgroundTint="@color/green_primary"/>
+                android:backgroundTint="?attr/colorPrimary"/>
         </LinearLayout>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

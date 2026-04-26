@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="Planta"
-        android:textColor="@android:color/black"
+        android:textColor="?android:attr/textColorPrimary"
         android:gravity="center" />
 
     <TextView
@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1.5"
         android:text="Tag"
-        android:textColor="@android:color/holo_blue_dark"
+        android:textColor="?attr/colorPrimary"
         android:textStyle="bold"
         android:gravity="center" />
 
@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1.5"
         android:text="Instrumento"
-        android:textColor="@android:color/black"
+        android:textColor="?android:attr/textColorPrimary"
         android:gravity="center" />
 
     <TextView
@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="Tarjeta"
-        android:textColor="@android:color/black"
+        android:textColor="?android:attr/textColorPrimary"
         android:gravity="center" />
 
 </LinearLayout>

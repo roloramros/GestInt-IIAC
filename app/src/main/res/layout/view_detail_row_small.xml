@@ -12,7 +12,7 @@
         android:text="Label"
         android:textAppearance="?attr/textAppearanceBodySmall"
         android:textStyle="bold"
-        android:textColor="#757575" />
+        android:textColor="?android:attr/textColorSecondary" />
 
     <TextView
         android:id="@+id/tvValue"
@@ -20,6 +20,6 @@
         android:layout_height="wrap_content"
         android:text="Value"
         android:textAppearance="?attr/textAppearanceBodyMedium"
-        android:textColor="@color/black" />
+        android:textColor="?android:attr/textColorPrimary" />
 
 </LinearLayout>

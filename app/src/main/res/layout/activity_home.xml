@@ -20,13 +20,14 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:title="Inicio"
-            app:titleTextColor="@android:color/white"
+            app:titleTextColor="?attr/colorOnPrimary"
+            app:navigationIconTint="?attr/colorOnPrimary"
             app:navigationIcon="@android:drawable/ic_menu_sort_by_size" />
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#F5F5F5">
+            android:background="?android:attr/windowBackground">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -42,14 +43,14 @@
                     android:text="¡Buen día!"
                     android:textSize="28sp"
                     android:textStyle="bold"
-                    android:textColor="@color/black" />
+                    android:textColor="?android:attr/textColorPrimary" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Bienvenido al Sistema IAAC (BD)"
                     android:textSize="16sp"
-                    android:textColor="#757575"
+                    android:textColor="?android:attr/textColorSecondary"
                     android:layout_marginBottom="24dp" />
 
                 <!-- Card: Descripción General -->
@@ -66,13 +67,13 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:padding="20dp"
-                        android:background="@color/green_primary">
+                        android:background="?attr/colorPrimary">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Sobre la Aplicación"
-                            android:textColor="@android:color/white"
+                            android:textColor="?attr/colorOnPrimary"
                             android:textSize="18sp"
                             android:textStyle="bold"
                             android:layout_marginBottom="8dp" />
@@ -81,7 +82,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="IAAC (BD) es la herramienta centralizada para la administración de instrumentos en plantas industriales. Diseñada para optimizar el seguimiento técnico, mantenimiento y localización de equipos en tiempo real."
-                            android:textColor="#E0E0E0"
+                            android:textColor="?attr/colorOnPrimary"
                             android:lineSpacingExtra="4dp"
                             android:textSize="14sp" />
                     </LinearLayout>
@@ -122,7 +123,7 @@
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
                                 android:src="@android:drawable/ic_menu_agenda"
-                                app:tint="@color/green_primary" />
+                                app:tint="?attr/colorPrimary" />
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -151,7 +152,7 @@
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
                                 android:src="@android:drawable/ic_menu_search"
-                                app:tint="@color/green_primary" />
+                                app:tint="?attr/colorPrimary" />
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -179,7 +180,7 @@
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:src="@android:drawable/ic_menu_recent_history"
-                            app:tint="@color/green_primary" />
+                            app:tint="?attr/colorPrimary" />
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -196,7 +197,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="Próximamente: Gestión de ciclos y fechas"
                                 android:textSize="12sp"
-                                android:textColor="#757575" />
+                                android:textColor="?android:attr/textColorSecondary" />
                         </LinearLayout>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -209,7 +210,7 @@
                     app:cardCornerRadius="12dp"
                     app:cardElevation="0dp"
                     app:strokeWidth="1dp"
-                    app:strokeColor="#E0E0E0">
+                    app:strokeColor="?attr/colorOutline">
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -220,14 +221,14 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@android:drawable/ic_dialog_info"
-                            app:tint="#757575" />
+                            app:tint="?android:attr/textColorSecondary" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="12dp"
                             android:text="Versión del sistema: 1.2.0 (Estable)"
                             android:textSize="12sp"
-                            android:textColor="#757575" />
+                            android:textColor="?android:attr/textColorSecondary" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 

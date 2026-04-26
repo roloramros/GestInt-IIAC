@@ -18,7 +18,7 @@
             android:text="Añadir/Editar Usuario"
             android:textSize="22sp"
             android:textStyle="bold"
-            android:textColor="@color/green_primary"
+            android:textColor="?attr/colorPrimary"
             android:gravity="center"
             android:layout_marginBottom="24dp"/>
 
@@ -29,14 +29,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Nombre de usuario"
-            app:boxStrokeColor="@color/green_primary"
+            app:boxStrokeColor="?attr/colorPrimary"
             android:layout_marginBottom="16dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etUsername"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"/>
+                android:inputType="text"
+                android:textColor="?android:attr/textColorPrimary"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Campo Contraseña (solo para nuevo usuario o cambio) -->
@@ -46,7 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Contraseña"
-            app:boxStrokeColor="@color/green_primary"
+            app:boxStrokeColor="?attr/colorPrimary"
             app:endIconMode="password_toggle"
             android:layout_marginBottom="16dp">
 
@@ -54,7 +55,8 @@
                 android:id="@+id/etPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"/>
+                android:inputType="textPassword"
+                android:textColor="?android:attr/textColorPrimary"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Campo Rol -->
@@ -64,14 +66,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Rol"
-            app:boxStrokeColor="@color/green_primary"
+            app:boxStrokeColor="?attr/colorPrimary"
             android:layout_marginBottom="24dp">
 
             <AutoCompleteTextView
                 android:id="@+id/etRole"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="none"/>
+                android:inputType="none"
+                android:textColor="?android:attr/textColorPrimary"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Botones -->
@@ -97,7 +100,7 @@
                 android:layout_weight="1"
                 android:text="Guardar"
                 app:cornerRadius="28dp"
-                android:backgroundTint="@color/green_primary"/>
+                android:backgroundTint="?attr/colorPrimary"/>
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

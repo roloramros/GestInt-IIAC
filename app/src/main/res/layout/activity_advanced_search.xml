@@ -20,7 +20,8 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:title="Búsqueda Avanzada"
-            app:titleTextColor="@android:color/white"
+            app:titleTextColor="?attr/colorOnPrimary"
+            app:navigationIconTint="?attr/colorOnPrimary"
             app:navigationIcon="@android:drawable/ic_menu_sort_by_size"
             app:menu="@menu/advanced_search_menu" />
 

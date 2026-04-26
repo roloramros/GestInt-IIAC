@@ -10,7 +10,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#DDDDDD"
+        android:background="?android:attr/listDivider"
         android:layout_marginBottom="16dp" />
 
     <TextView
@@ -20,7 +20,7 @@
         android:text="Usuario"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:textColor="@color/green_primary"
+        android:textColor="?attr/colorPrimary"
         android:layout_marginBottom="8dp"
         android:gravity="center" />
 
@@ -29,10 +29,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Cerrar Sesión"
-        android:textColor="@color/white"
-        app:backgroundTint="#D32F2F"
+        android:textColor="?attr/colorOnPrimary"
+        app:backgroundTint="?attr/colorDestructive"
         app:cornerRadius="28dp"
         app:icon="@drawable/ic_lock"
-        app:iconTint="@color/white" />
+        app:iconTint="?attr/colorOnPrimary" />
 
 </LinearLayout>
