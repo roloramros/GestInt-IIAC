@@ -76,7 +76,7 @@ public class InstrumentoDetailActivity extends AppCompatActivity implements Inst
         // Click normal: Atrás
         fabBack.setOnClickListener(v -> finish());
 
-        // Pulsación larga: Mostrar/Ocultar menú
+        // Pulsación larga: Mostrar/Ocultar menú (Versión Simple)
         fabBack.setOnLongClickListener(v -> {
             String userRole = TokenManager.getRole(this);
             if ("admin".equalsIgnoreCase(userRole)) {
@@ -91,12 +91,12 @@ public class InstrumentoDetailActivity extends AppCompatActivity implements Inst
         fabEdit.setOnClickListener(v -> {
             InstrumentoFormDialog dialog = new InstrumentoFormDialog(this, instrumento, this);
             dialog.show();
-            toggleFabMenu(); // Ocultar después de abrir
+            if (isFabMenuOpen) toggleFabMenu(); 
         });
 
         fabDelete.setOnClickListener(v -> {
             showDeleteConfirmation();
-            toggleFabMenu(); // Ocultar después de abrir
+            if (isFabMenuOpen) toggleFabMenu();
         });
         // --- FAB CODE END ---
     }

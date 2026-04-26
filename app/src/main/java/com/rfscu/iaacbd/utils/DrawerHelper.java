@@ -24,32 +24,42 @@ public class DrawerHelper {
             btnLogoutDrawer.setOnClickListener(v -> performLogout(activity));
         }
 
-        // Load User Info
+        // Load User Info (Header and Footer)
         loadDrawerUserInfo(activity, navView);
 
         // Setup Dark Mode Toggle
         setupDarkModeToggle(activity, navView);
     }
 
-    private static void loadDrawerUserInfo(Context context, NavigationView navView) {
-        String username = TokenManager.getUsername(context);
-        String role = TokenManager.getRole(context);
+    private static void loadDrawerUserInfo(Activity activity, NavigationView navView) {
+        String username = TokenManager.getUsername(activity);
+        String role = TokenManager.getRole(activity);
+        
+        String displayText = "Invitado";
+        if (username != null && !username.isEmpty()) {
+            displayText = (role != null && !role.isEmpty())
+                    ? username + " (" + role + ")"
+                    : username;
+        }
 
+        // 1. Update Header (if exists)
         View headerView = navView.getHeaderView(0);
         if (headerView != null) {
-            TextView tvUserName = headerView.findViewById(R.id.tvUserName);
-            if (tvUserName != null) {
-                if (username != null && !username.isEmpty()) {
-                    String displayText = (role != null && !role.isEmpty())
-                            ? username + " (" + role + ")"
-                            : username;
-                    tvUserName.setText(displayText);
-                } else {
-                    tvUserName.setText("Invitado");
-                }
+            TextView tvUserNameHeader = headerView.findViewById(R.id.tvUserName);
+            if (tvUserNameHeader != null) {
+                tvUserNameHeader.setText(displayText);
             }
         }
 
+        // 2. Update Footer (looking in the activity directly since it's an included layout)
+        TextView tvUserNameFooter = activity.findViewById(R.id.tvUserName);
+        // Note: We check if it's NOT the one from the header by checking its parent or context if necessary, 
+        // but activity.findViewById will find the one in the main layout (the footer).
+        if (tvUserNameFooter != null) {
+            tvUserNameFooter.setText(displayText);
+        }
+
+        // 3. Update Menu Visibility
         MenuItem userMgmtItem = navView.getMenu().findItem(R.id.nav_user_management);
         if (userMgmtItem != null) {
             userMgmtItem.setVisible("admin".equalsIgnoreCase(role));
