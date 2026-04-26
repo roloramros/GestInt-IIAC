@@ -231,7 +231,9 @@
                 android:id="@+id/fabBack"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_back" />
+                app:srcCompat="@drawable/ic_back"
+                app:backgroundTint="?attr/colorPrimary"
+                app:tint="?attr/colorOnPrimary" />
 
         </LinearLayout>
 
