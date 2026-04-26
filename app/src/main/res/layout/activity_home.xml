@@ -48,7 +48,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Bienvenido al Sistema IAAC (BD)"
+                    android:text="Bienvenido al Sistema GestInst IIAC"
                     android:textSize="16sp"
                     android:textColor="?android:attr/textColorSecondary"
                     android:layout_marginBottom="24dp" />
@@ -81,7 +81,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="IAAC (BD) es la herramienta centralizada para la administración de instrumentos en plantas industriales. Diseñada para optimizar el seguimiento técnico, mantenimiento y localización de equipos en tiempo real."
+                            android:text="La aplicación GestInst IIAC es la herramienta centralizada para la administración de la instrumentación del Sistema de Control en las diferentes plantas de la Refinería Hermanos Díaz. Está diseñada para optimizar el seguimiento técnico, mantenimiento y localización de equipos en tiempo real."
                             android:textColor="?attr/colorOnPrimary"
                             android:lineSpacingExtra="4dp"
                             android:textSize="14sp" />
@@ -104,7 +104,7 @@
                     android:baselineAligned="false"
                     android:layout_marginBottom="16dp">
 
-                    <!-- Card: Listado -->
+                    <!-- Card: Listado -->                                                                                                               
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/cardListado"
                         android:layout_width="0dp"
