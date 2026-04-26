@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@android:drawable/ic_dialog_info"
+            android:title="Inicio" />
+        <item
+            android:id="@+id/nav_list"
+            android:icon="@android:drawable/ic_dialog_dialer"
+            android:title="Listado General" />
+        <item
+            android:id="@+id/nav_advanced_search"
+            android:icon="@android:drawable/ic_menu_search"
+            android:title="Búsqueda Avanzada" />
+        <item
+            android:id="@+id/nav_calibration"
+            android:icon="@android:drawable/ic_menu_recent_history"
+            android:title="Planes de Calibración" />
+        <item
+            android:id="@+id/nav_sync_bd"
+            android:icon="@android:drawable/ic_popup_sync"
+            android:title="Sincronizar BD Offline" />
+        <item
+            android:id="@+id/nav_user_management"
+            android:icon="@android:drawable/ic_menu_myplaces"
+            android:title="Gestión de Usuarios" />
+
+    </group>
+</menu>

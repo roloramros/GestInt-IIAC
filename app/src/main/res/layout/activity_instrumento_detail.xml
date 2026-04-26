@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:title="Detalles del Instrumento"
+                app:titleTextColor="@color/white"
+                app:navigationIcon="@drawable/ic_back" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- Información General -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="28dp"
+                    app:cardElevation="2dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="#E0E0E0">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Información General"
+                            android:textAppearance="?attr/textAppearanceTitleMedium"
+                            android:textColor="?attr/colorPrimary"
+                            android:layout_marginBottom="16dp" />
+
+                        <include layout="@layout/view_detail_row" android:id="@+id/rowTag" />
+                        <include layout="@layout/view_detail_row" android:id="@+id/rowPlanta" />
+                        <include layout="@layout/view_detail_row" android:id="@+id/rowInstrumento" />
+                        <include layout="@layout/view_detail_row" android:id="@+id/rowTarjeta" />
+                        <include layout="@layout/view_detail_row" android:id="@+id/rowNoSerie" />
+                        <include layout="@layout/view_detail_row" android:id="@+id/rowRango" />
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Parámetros Técnicos -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:cardCornerRadius="28dp"
+                    app:cardElevation="2dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="#E0E0E0">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Parámetros Técnicos"
+                            android:textAppearance="?attr/textAppearanceTitleMedium"
+                            android:textColor="?attr/colorPrimary"
+                            android:layout_marginBottom="16dp" />
+
+                        <include layout="@layout/view_detail_row" android:id="@+id/rowDirIm" />
+                        <include layout="@layout/view_detail_row" android:id="@+id/rowDirPa" />
+                        <include layout="@layout/view_detail_row" android:id="@+id/rowVarMedida" />
+                        <include layout="@layout/view_detail_row" android:id="@+id/rowComunicacion" />
+                        <include layout="@layout/view_detail_row" android:id="@+id/rowSeguridad" />
+                        <include layout="@layout/view_detail_row" android:id="@+id/rowDescripcion" />
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Límites y Alarmas -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:cardCornerRadius="28dp"
+                    app:cardElevation="2dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="#E0E0E0">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Límites y Alarmas"
+                            android:textAppearance="?attr/textAppearanceTitleMedium"
+                            android:textColor="?attr/colorPrimary"
+                            android:layout_marginBottom="16dp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:baselineAligned="false">
+                            <include layout="@layout/view_detail_row_small" android:id="@+id/rowLowWarning" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" />
+                            <include layout="@layout/view_detail_row_small" android:id="@+id/rowHighWarning" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" />
+                        </LinearLayout>
+                        
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="8dp"
+                            android:baselineAligned="false">
+                            <include layout="@layout/view_detail_row_small" android:id="@+id/rowLowAlarm" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" />
+                            <include layout="@layout/view_detail_row_small" android:id="@+id/rowHighAlarm" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="#EEEEEE"
+                            android:layout_marginVertical="12dp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:baselineAligned="false">
+                            <include layout="@layout/view_detail_row_small" android:id="@+id/rowStartWr" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" />
+                            <include layout="@layout/view_detail_row_small" android:id="@+id/rowEndWr" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="8dp"
+                            android:baselineAligned="false">
+                            <include layout="@layout/view_detail_row_small" android:id="@+id/rowStartMr" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" />
+                            <include layout="@layout/view_detail_row_small" android:id="@+id/rowEndMr" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:id="@+id/tvLastUpdate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Actualizado por: -"
+                    android:textAppearance="?attr/textAppearanceBodySmall"
+                    android:gravity="center" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnEditInstrumento"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="4dp"
+                        android:text="Editar"
+                        android:visibility="gone"
+                        app:cornerRadius="28dp"
+                        app:icon="@android:drawable/ic_menu_edit" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnDeleteInstrumento"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="4dp"
+                        android:text="Eliminar"
+                        android:visibility="gone"
+                        app:backgroundTint="@color/design_default_color_error"
+                        app:cornerRadius="28dp"
+                        app:icon="@android:drawable/ic_menu_delete"
+                        app:iconTint="@android:color/white" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp" />
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <!-- CONTENEDOR DEL DRAWER -->
+    <LinearLayout
+        android:id="@+id/drawer_content"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:orientation="vertical"
+        android:background="?android:attr/windowBackground"
+        android:fitsSystemWindows="true">
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/nav_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            app:menu="@menu/navigation_menu" />
+
+        <include layout="@layout/nav_footer" />
+    </LinearLayout>
+
+</androidx.drawerlayout.widget.DrawerLayout>

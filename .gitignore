@@ -1,0 +1,68 @@
+```
+# Android build outputs
+*.apk
+*.aar
+*.jar
+*.dex
+
+# Android generated files
+build/
+.gradle/
+local.properties
+proguard/
+
+# Android studio
+.idea/
+*.iml
+*.iws
+
+# Java
+*.class
+*.so
+*.dll
+*.dylib
+
+# Temp files
+*.tmp
+*.swp
+*~
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Coverage reports
+coverage/
+*.coverage
+htmlcov/
+
+# Environment
+.env
+.env.local
+*.env.*
+
+# Python (if present)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.git/modules/
+.project
+.pydevproject
+.vscode/
+```
