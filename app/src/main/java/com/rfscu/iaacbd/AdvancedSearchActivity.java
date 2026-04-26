@@ -11,7 +11,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -23,20 +22,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.rfscu.iaacbd.adapter.InstrumentoAdapter;
 import com.rfscu.iaacbd.api.RetrofitClient;
 import com.rfscu.iaacbd.model.Instrumento;
+import com.rfscu.iaacbd.utils.DrawerHelper;
 import com.rfscu.iaacbd.utils.TokenManager;
 
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.ProgressBar;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -60,7 +54,6 @@ public class AdvancedSearchActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
     private NavigationView navView;
-    private TextView tvUserName;
     private Button btnLogoutDrawer;
 
     @Override
@@ -121,7 +114,6 @@ public class AdvancedSearchActivity extends AppCompatActivity {
 
         drawerLayout = findViewById(R.id.drawer_layout);
         navView = findViewById(R.id.nav_view);
-        tvUserName = findViewById(R.id.tvUserName);
         btnLogoutDrawer = findViewById(R.id.btnLogoutDrawer);
 
         // Forzar estado desactivado inicial
@@ -149,38 +141,7 @@ public class AdvancedSearchActivity extends AppCompatActivity {
             return true;
         });
 
-
-        btnLogoutDrawer.setOnClickListener(v -> performLogout());
-        loadDrawerUserInfo();
-    }
-
-    private void loadDrawerUserInfo() {
-        String username = TokenManager.getUsername(this);
-        String role = TokenManager.getRole(this);
-
-        if (username != null && !username.isEmpty()) {
-            String displayText = (role != null && !role.isEmpty())
-                    ? username + " (" + role + ")"
-                    : username;
-            tvUserName.setText(displayText);
-        } else {
-            tvUserName.setText("Invitado");
-        }
-
-        if (navView != null) {
-            android.view.MenuItem userMgmtItem = navView.getMenu().findItem(R.id.nav_user_management);
-            if (userMgmtItem != null) {
-                userMgmtItem.setVisible("admin".equalsIgnoreCase(role));
-            }
-        }
-    }
-
-    private void performLogout() {
-        TokenManager.clearToken(this);
-        Intent intent = new Intent(this, Login.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
+        DrawerHelper.setupDrawer(this, navView, btnLogoutDrawer);
     }
 
     private void disableAllInputs() {

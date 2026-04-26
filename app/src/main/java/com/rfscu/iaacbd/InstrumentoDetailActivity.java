@@ -14,12 +14,13 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.button.MaterialButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.rfscu.iaacbd.api.RetrofitClient;
 import com.rfscu.iaacbd.model.Instrumento;
 import com.rfscu.iaacbd.model.InstrumentoCreateRequest;
 import com.rfscu.iaacbd.model.InstrumentoUpdateRequest;
+import com.rfscu.iaacbd.utils.DrawerHelper;
 import com.rfscu.iaacbd.utils.InstrumentoFormDialog;
 import com.rfscu.iaacbd.utils.TokenManager;
 
@@ -30,13 +31,15 @@ import retrofit2.Response;
 public class InstrumentoDetailActivity extends AppCompatActivity implements InstrumentoFormDialog.FormCallback {
 
     private Instrumento instrumento;
-    private MaterialButton btnEditInstrumento, btnDeleteInstrumento;
     private TextView tvLastUpdate;
 
     private DrawerLayout drawerLayout;
     private NavigationView navView;
-    private TextView tvUserNameDrawer;
     private Button btnLogoutDrawer;
+
+    // Floating Action Buttons
+    private FloatingActionButton fabBack, fabEdit, fabDelete;
+    private boolean isFabMenuOpen = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,30 +60,56 @@ public class InstrumentoDetailActivity extends AppCompatActivity implements Inst
 
     private void initViews() {
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setNavigationOnClickListener(v -> finish());
+        toolbar.setNavigationOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
 
-        btnEditInstrumento = findViewById(R.id.btnEditInstrumento);
-        btnDeleteInstrumento = findViewById(R.id.btnDeleteInstrumento);
         tvLastUpdate = findViewById(R.id.tvLastUpdate);
         
         drawerLayout = findViewById(R.id.drawer_layout);
         navView = findViewById(R.id.nav_view);
-        tvUserNameDrawer = findViewById(R.id.tvUserName);
         btnLogoutDrawer = findViewById(R.id.btnLogoutDrawer);
 
-        String role = TokenManager.getRole(this);
-        if ("admin".equalsIgnoreCase(role)) {
-            btnEditInstrumento.setVisibility(View.VISIBLE);
-            btnDeleteInstrumento.setVisibility(View.VISIBLE);
-        }
+        // --- FAB CODE START ---
+        fabBack = findViewById(R.id.fabBack);
+        fabEdit = findViewById(R.id.fabEdit);
+        fabDelete = findViewById(R.id.fabDelete);
 
-        btnEditInstrumento.setOnClickListener(v -> {
-            InstrumentoFormDialog dialog = new InstrumentoFormDialog(this, instrumento, this);
-            dialog.show();
+        // Click normal: Atrás
+        fabBack.setOnClickListener(v -> finish());
+
+        // Pulsación larga: Mostrar/Ocultar menú
+        fabBack.setOnLongClickListener(v -> {
+            String userRole = TokenManager.getRole(this);
+            if ("admin".equalsIgnoreCase(userRole)) {
+                toggleFabMenu();
+            } else {
+                Toast.makeText(this, "Solo administradores pueden editar o eliminar", Toast.LENGTH_SHORT).show();
+            }
+            return true;
         });
 
-        btnDeleteInstrumento.setOnClickListener(v -> showDeleteConfirmation());
+        // Acciones de los sub-botones FAB
+        fabEdit.setOnClickListener(v -> {
+            InstrumentoFormDialog dialog = new InstrumentoFormDialog(this, instrumento, this);
+            dialog.show();
+            toggleFabMenu(); // Ocultar después de abrir
+        });
+
+        fabDelete.setOnClickListener(v -> {
+            showDeleteConfirmation();
+            toggleFabMenu(); // Ocultar después de abrir
+        });
+        // --- FAB CODE END ---
+    }
+
+    private void toggleFabMenu() {
+        isFabMenuOpen = !isFabMenuOpen;
+        if (isFabMenuOpen) {
+            fabEdit.setVisibility(View.VISIBLE);
+            fabDelete.setVisibility(View.VISIBLE);
+        } else {
+            fabEdit.setVisibility(View.GONE);
+            fabDelete.setVisibility(View.GONE);
+        }
     }
 
     private void showDeleteConfirmation() {
@@ -135,37 +164,7 @@ public class InstrumentoDetailActivity extends AppCompatActivity implements Inst
             return true;
         });
 
-        btnLogoutDrawer.setOnClickListener(v -> performLogout());
-        loadDrawerUserInfo();
-    }
-
-    private void loadDrawerUserInfo() {
-        String username = TokenManager.getUsername(this);
-        String role = TokenManager.getRole(this);
-
-        if (username != null && !username.isEmpty()) {
-            String displayText = (role != null && !role.isEmpty())
-                    ? username + " (" + role + ")"
-                    : username;
-            tvUserNameDrawer.setText(displayText);
-        } else {
-            tvUserNameDrawer.setText("Invitado");
-        }
-
-        if (navView != null) {
-            android.view.MenuItem userMgmtItem = navView.getMenu().findItem(R.id.nav_user_management);
-            if (userMgmtItem != null) {
-                userMgmtItem.setVisible("admin".equalsIgnoreCase(role));
-            }
-        }
-    }
-
-    private void performLogout() {
-        TokenManager.clearToken(this);
-        Intent intent = new Intent(this, Login.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
+        DrawerHelper.setupDrawer(this, navView, btnLogoutDrawer);
     }
 
     private void displayData() {

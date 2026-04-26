@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +28,7 @@ import com.rfscu.iaacbd.adapter.UserAdapter;
 import com.rfscu.iaacbd.api.RetrofitClient;
 import com.rfscu.iaacbd.model.User;
 import com.rfscu.iaacbd.model.UserRequest;
+import com.rfscu.iaacbd.utils.DrawerHelper;
 import com.rfscu.iaacbd.utils.TokenManager;
 
 import java.util.List;
@@ -46,7 +46,6 @@ public class UserManagementActivity extends AppCompatActivity implements UserAda
 
     private DrawerLayout drawerLayout;
     private NavigationView navView;
-    private TextView tvUserName;
     private Button btnLogoutDrawer;
 
     private Dialog userDialog;
@@ -90,7 +89,6 @@ public class UserManagementActivity extends AppCompatActivity implements UserAda
         
         drawerLayout = findViewById(R.id.drawer_layout);
         navView = findViewById(R.id.nav_view);
-        tvUserName = findViewById(R.id.tvUserName);
         btnLogoutDrawer = findViewById(R.id.btnLogoutDrawer);
     }
 
@@ -119,39 +117,7 @@ public class UserManagementActivity extends AppCompatActivity implements UserAda
             return true;
         });
 
-        btnLogoutDrawer.setOnClickListener(v -> performLogout());
-        loadDrawerUserInfo();
-    }
-
-    private void loadDrawerUserInfo() {
-        String username = TokenManager.getUsername(this);
-        String role = TokenManager.getRole(this);
-
-        if (username != null && !username.isEmpty()) {
-            // Formato solicitado: Usuario (Rol)
-            String displayText = (role != null && !role.isEmpty())
-                    ? username + " (" + role + ")"
-                    : username;
-            tvUserName.setText(displayText);
-        } else {
-            tvUserName.setText("Invitado");
-        }
-
-        // Mostrar "Gestión de Usuarios" solo si es admin
-        if (navView != null) {
-            android.view.MenuItem userMgmtItem = navView.getMenu().findItem(R.id.nav_user_management);
-            if (userMgmtItem != null) {
-                userMgmtItem.setVisible("admin".equalsIgnoreCase(role));
-            }
-        }
-    }
-
-    private void performLogout() {
-        TokenManager.clearToken(this);
-        Intent intent = new Intent(this, Login.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
+        DrawerHelper.setupDrawer(this, navView, btnLogoutDrawer);
     }
 
     private void setupRecyclerView() {

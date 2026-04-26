@@ -30,6 +30,7 @@ import com.rfscu.iaacbd.api.RetrofitClient;
 import com.rfscu.iaacbd.model.Instrumento;
 import com.rfscu.iaacbd.model.InstrumentoCreateRequest;
 import com.rfscu.iaacbd.model.InstrumentoUpdateRequest;
+import com.rfscu.iaacbd.utils.DrawerHelper;
 import com.rfscu.iaacbd.utils.InstrumentoFormDialog;
 import com.rfscu.iaacbd.utils.TokenManager;
 
@@ -47,7 +48,6 @@ public class MainActivity extends AppCompatActivity implements InstrumentoFormDi
     private DrawerLayout drawerLayout;
     private NavigationView navView;
     private Button btnLogoutDrawer;
-    private TextView tvUserName;
 
     private RecyclerView rvInstrumentos;
     private InstrumentoAdapter instrumentoAdapter;
@@ -75,7 +75,6 @@ public class MainActivity extends AppCompatActivity implements InstrumentoFormDi
         setupToolbar();
         setupRecyclerView();
         setupListeners();
-        loadUserInfo();
         loadInstrumentos();
     }
 
@@ -93,7 +92,6 @@ public class MainActivity extends AppCompatActivity implements InstrumentoFormDi
         toolbar = findViewById(R.id.toolbar);
         drawerLayout = findViewById(R.id.drawer_layout);
         navView = findViewById(R.id.nav_view);
-        tvUserName = findViewById(R.id.tvUserName);
         btnLogoutDrawer = findViewById(R.id.btnLogoutDrawer);
 
         rvInstrumentos = findViewById(R.id.rvInstrumentos);
@@ -151,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements InstrumentoFormDi
             return true;
         });
 
-        btnLogoutDrawer.setOnClickListener(v -> performLogout());
+        DrawerHelper.setupDrawer(this, navView, btnLogoutDrawer);
 
         fabAddInstrumento.setOnClickListener(v -> {
             InstrumentoFormDialog dialog = new InstrumentoFormDialog(this, this);
@@ -212,27 +210,6 @@ public class MainActivity extends AppCompatActivity implements InstrumentoFormDi
         }
     }
 
-    private void loadUserInfo() {
-        String username = TokenManager.getUsername(this);
-        String role = TokenManager.getRole(this);
-
-        if (username != null && !username.isEmpty()) {
-            String displayText = (role != null && !role.isEmpty())
-                    ? username + " (" + role + ")"
-                    : username;
-            tvUserName.setText(displayText);
-        } else {
-            tvUserName.setText("Invitado");
-        }
-
-        if (navView != null) {
-            android.view.MenuItem userMgmtItem = navView.getMenu().findItem(R.id.nav_user_management);
-            if (userMgmtItem != null) {
-                userMgmtItem.setVisible("admin".equalsIgnoreCase(role));
-            }
-        }
-    }
-
     private void loadInstrumentos() {
         showProgress(true);
         RetrofitClient.getApiService(this).getInstrumentos().enqueue(new Callback<List<Instrumento>>() {
@@ -289,14 +266,6 @@ public class MainActivity extends AppCompatActivity implements InstrumentoFormDi
     @Override
     public void onUpdateInstrumento(int id, InstrumentoUpdateRequest data) {
         // Implementado en InstrumentoDetailActivity
-    }
-
-    private void performLogout() {
-        TokenManager.clearToken(this);
-        Intent intent = new Intent(this, Login.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
     }
 
     private void showProgress(boolean show) {

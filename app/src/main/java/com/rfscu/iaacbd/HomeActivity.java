@@ -19,6 +19,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.navigation.NavigationView;
+import com.rfscu.iaacbd.utils.DrawerHelper;
 import com.rfscu.iaacbd.utils.TokenManager;
 
 import java.util.Calendar;
@@ -27,7 +28,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
     private NavigationView navView;
-    private TextView tvUserName, tvWelcomeGreeting;
+    private TextView tvWelcomeGreeting;
     private Button btnLogoutDrawer;
     private MaterialToolbar toolbar;
     private MaterialCardView cardListado, cardBusqueda, cardCalibration;
@@ -69,7 +70,6 @@ public class HomeActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         drawerLayout = findViewById(R.id.drawer_layout);
         navView = findViewById(R.id.nav_view);
-        tvUserName = findViewById(R.id.tvUserName);
         tvWelcomeGreeting = findViewById(R.id.tvWelcomeGreeting);
         btnLogoutDrawer = findViewById(R.id.btnLogoutDrawer);
         cardListado = findViewById(R.id.cardListado);
@@ -128,36 +128,6 @@ public class HomeActivity extends AppCompatActivity {
             return true;
         });
 
-        btnLogoutDrawer.setOnClickListener(v -> performLogout());
-        loadDrawerUserInfo();
-    }
-
-    private void loadDrawerUserInfo() {
-        String username = TokenManager.getUsername(this);
-        String role = TokenManager.getRole(this);
-
-        if (username != null && !username.isEmpty()) {
-            String displayText = (role != null && !role.isEmpty())
-                    ? username + " (" + role + ")"
-                    : username;
-            tvUserName.setText(displayText);
-        } else {
-            tvUserName.setText("Invitado");
-        }
-
-        if (navView != null) {
-            android.view.MenuItem userMgmtItem = navView.getMenu().findItem(R.id.nav_user_management);
-            if (userMgmtItem != null) {
-                userMgmtItem.setVisible("admin".equalsIgnoreCase(role));
-            }
-        }
-    }
-
-    private void performLogout() {
-        TokenManager.clearToken(this);
-        Intent intent = new Intent(this, Login.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
+        DrawerHelper.setupDrawer(this, navView, btnLogoutDrawer);
     }
 }

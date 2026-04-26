@@ -25,7 +25,7 @@
                 android:background="?attr/colorPrimary"
                 app:title="Detalles del Instrumento"
                 app:titleTextColor="@color/white"
-                app:navigationIcon="@drawable/ic_back" />
+                app:navigationIcon="@android:drawable/ic_menu_sort_by_size" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -187,43 +187,50 @@
                     android:textAppearance="?attr/textAppearanceBodySmall"
                     android:gravity="center" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:orientation="horizontal">
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnEditInstrumento"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginEnd="4dp"
-                        android:text="Editar"
-                        android:visibility="gone"
-                        app:cornerRadius="28dp"
-                        app:icon="@android:drawable/ic_menu_edit" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnDeleteInstrumento"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginStart="4dp"
-                        android:text="Eliminar"
-                        android:visibility="gone"
-                        app:backgroundTint="@color/design_default_color_error"
-                        app:cornerRadius="28dp"
-                        app:icon="@android:drawable/ic_menu_delete"
-                        app:iconTint="@android:color/white" />
-                </LinearLayout>
-
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="48dp" />
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
+
+        <!-- CONTENEDOR DE BOTONES FLOTANTES -->
+        <LinearLayout
+            android:id="@+id/fabContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabDelete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:visibility="gone"
+                app:srcCompat="@android:drawable/ic_menu_delete"
+                app:backgroundTint="@color/design_default_color_error"
+                app:tint="@android:color/white"
+                app:fabSize="mini" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:visibility="gone"
+                app:srcCompat="@android:drawable/ic_menu_edit"
+                app:fabSize="mini" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_back" />
+
+        </LinearLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
@@ -242,6 +249,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            app:headerLayout="@layout/nav_header"
             app:menu="@menu/navigation_menu" />
 
         <include layout="@layout/nav_footer" />
