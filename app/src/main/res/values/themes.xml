@@ -1,10 +1,35 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <style name="Theme.IAACBD" parent="android:Theme.Material.Light.NoActionBar" />
-    <!-- Base application theme. -->
-    <style name="Base.Theme.IAACBD" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <!-- Light Theme -->
+    <style name="Theme.IAACBD.Light" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorPrimary">@color/green_primary</item>
+        <item name="colorSecondary">@color/green_secondary</item>
+        <item name="colorSurface">@color/surface_light</item>
+        <item name="android:colorBackground">@color/bg_light</item>
+        <item name="android:windowBackground">@color/bg_light</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnSurface">@color/text_on_light</item>
+        <item name="colorOnBackground">@color/text_on_light</item>
+        <item name="android:statusBarColor">@color/green_toolbar_light</item>
+        <item name="android:textColorPrimary">@color/text_on_light</item>
+        <item name="android:textColorSecondary">@color/text_hint_light</item>
+        <item name="colorDestructive">@color/color_delete_light</item>
     </style>
+
+    <!-- Dark Theme -->
+    <style name="Theme.IAACBD.Dark" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="colorPrimary">@color/green_primary_dark</item>
+        <item name="colorSecondary">@color/green_secondary</item>
+        <item name="colorSurface">@color/surface_dark</item>
+        <item name="android:colorBackground">@color/bg_dark</item>
+        <item name="android:windowBackground">@color/bg_dark</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnSurface">@color/text_on_dark</item>
+        <item name="colorOnBackground">@color/text_on_dark</item>
+        <item name="android:statusBarColor">@color/green_toolbar_dark</item>
+        <item name="android:textColorPrimary">@color/text_on_dark</item>
+        <item name="android:textColorSecondary">@color/text_hint_dark</item>
+        <item name="colorDestructive">@color/color_delete_dark</item>
+    </style>
+
+    <style name="Theme.IAACBD" parent="Theme.IAACBD.Light" />
 </resources>
