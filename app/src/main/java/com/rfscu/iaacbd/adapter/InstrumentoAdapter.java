@@ -20,6 +20,7 @@ public class InstrumentoAdapter extends RecyclerView.Adapter<InstrumentoAdapter.
 
     public interface OnInstrumentoClickListener {
         void onTagClick(Instrumento instrumento);
+        void onTarjetaClick(Instrumento instrumento);
     }
 
     public void setInstrumentos(List<Instrumento> instrumentos) {
@@ -72,6 +73,12 @@ public class InstrumentoAdapter extends RecyclerView.Adapter<InstrumentoAdapter.
             tvTag.setOnClickListener(v -> {
                 if (clickListener != null) {
                     clickListener.onTagClick(instrumento);
+                }
+            });
+
+            tvTarjeta.setOnClickListener(v -> {
+                if (clickListener != null) {
+                    clickListener.onTarjetaClick(instrumento);
                 }
             });
         }
