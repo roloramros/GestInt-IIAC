@@ -65,9 +65,14 @@
                             android:layout_marginBottom="16dp" />
 
                         <include layout="@layout/view_detail_row" android:id="@+id/rowTag" />
+
+                        <include
+                            android:id="@+id/rowDescripcion"
+                            layout="@layout/view_detail_row" />
+
                         <include layout="@layout/view_detail_row" android:id="@+id/rowPlanta" />
                         <include layout="@layout/view_detail_row" android:id="@+id/rowInstrumento" />
-                        <include layout="@layout/view_detail_row" android:id="@+id/rowTarjeta" />
+
                         <include layout="@layout/view_detail_row" android:id="@+id/rowNoSerie" />
                         <include layout="@layout/view_detail_row" android:id="@+id/rowRango" />
 
@@ -98,12 +103,19 @@
                             android:textColor="?attr/colorPrimary"
                             android:layout_marginBottom="16dp" />
 
+                        <include
+                            android:id="@+id/rowVarMedida"
+                            layout="@layout/view_detail_row" />
+
+                        <include
+                            android:id="@+id/rowTarjeta"
+                            layout="@layout/view_detail_row" />
+
                         <include layout="@layout/view_detail_row" android:id="@+id/rowDirIm" />
                         <include layout="@layout/view_detail_row" android:id="@+id/rowDirPa" />
-                        <include layout="@layout/view_detail_row" android:id="@+id/rowVarMedida" />
+
                         <include layout="@layout/view_detail_row" android:id="@+id/rowComunicacion" />
                         <include layout="@layout/view_detail_row" android:id="@+id/rowSeguridad" />
-                        <include layout="@layout/view_detail_row" android:id="@+id/rowDescripcion" />
 
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>

@@ -76,7 +76,7 @@ public class Login extends ThemeBaseActivity {
                                 TokenManager.saveUserInfo(Login.this, usuario, null, role);
 
                                 // ✅ Navega a la pantalla principal
-                                Intent intent = new Intent(Login.this, MainActivity.class);
+                                Intent intent = new Intent(Login.this, HomeActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
                                 finish();

@@ -1,0 +1,124 @@
+Aquí tienes el resumen técnico detallado del estado actual del proyecto GestInst IIAC. El sistema está concebido como
+  una solución integral cliente-servidor para la gestión de activos industriales.
+
+  ---
+
+  1. Arquitectura del Sistema
+   * Backend (API): Desarrollado en Python (FastAPI), siguiendo principios REST.
+   * Frontend (APK): Aplicación nativa para Android (Java) con arquitectura basada en Actividades y componentes de
+     Material Design 3 (M3).
+   * Base de Datos: Relacional (PostgreSQL/SQLite), gestionada mediante SQLAlchemy (ORM).
+
+  ---
+
+  2. Backend
+   La API actúa como el núcleo de lógica de negocio y persistencia.
+   Funcionalidades de la API:
+   * CRUD Completo: Endpoints para Crear, Leer (Lista y Detalle), Actualizar y Eliminar instrumentos.
+   * Seguridad: Sistema de autenticación basado en Tokens JWT.
+   * Gestión de Usuarios: Roles diferenciados (admin, user) para control de permisos.
+
+3. Frontend - Aplicación Android (APK)
+  La aplicación ha sido rediseñada para ofrecer una experiencia de usuario (UX) industrial moderna y eficiente.
+
+  Módulos Principales:
+   1. Login: Sistema de acceso seguro con persistencia de sesión (TokenManager).
+   2. Home (Inicio): Panel de bienvenida con acceso rápido a los módulos de Inventario y Búsqueda, y sección informativa
+      de la versión.
+   3. Listado General (MainActivity):
+       * Visualización de instrumentos en un RecyclerView optimizado.
+       * Búsqueda rápida en tiempo real por Tag integrada en el Toolbar.
+       * Botón Flotante (FAB) para creación rápida de nuevos registros.
+   4. Detalle del Instrumento:
+       * Vista organizada por secciones mediante MaterialCards (Información General, Parámetros Técnicos, Límites y
+         Alarmas).
+       * Acciones contextuales (Editar/Eliminar) protegidas por permisos.
+   5. Búsqueda Avanzada: Interfaz con múltiples filtros (Planta, Tipo, Variable, etc.) para localizar equipos
+      específicos en grandes inventarios.
+   6. Gestión de Usuarios: Panel exclusivo para administradores para dar de alta o modificar personal técnico.
+
+  ---
+
+  4. Características Transversales (Recién Implementadas)
+
+  Sistema de Temas Dinámico:
+   * Modo Claro/Oscuro Independiente: El usuario puede alternar el tema manualmente desde el menú lateral (icono de
+     sol/luna), sin depender de la configuración del sistema Android.
+   * Identidad Visual: Aplicación estricta de la marca en Verde Industrial (#2E7D32).
+   * Seguridad Visual: Los botones de borrado/acciones destructivas son siempre Rojos en ambos modos para prevenir
+     errores accidentales.
+   * Iconografía Adaptativa: Implementación de Adaptive Icons para asegurar que el logo sea nítido en cualquier
+     resolución de pantalla.
+
+  Navegación y UX:
+   * Drawer Lateral (Menú): Incluye cabecera con el logo, información del usuario logueado y el toggle de tema.
+   * Diseño Responsivo: Uso de atributos de tema (?attr/) en todos los layouts para asegurar que el contraste y los
+     colores sean perfectos tanto de día como de noche.
+
+
+
+
+La tabla de instrumentos de la base de datos tiene la sigueinte definicion:
+-- ==========================================
+-- SCRIPT DE CREACIÓN DE TABLA INSTRUMENTACIÓN
+-- ==========================================
+
+-- 1. Eliminar la tabla si ya existe (para permitir re-ejecutar el script)
+DROP TABLE IF EXISTS instrumentacion CASCADE;
+
+-- 2. Crear la tabla
+CREATE TABLE instrumentacion (
+    -- Identificación
+    id SERIAL PRIMARY KEY,
+    planta VARCHAR(10),
+    tag VARCHAR(50) NOT NULL UNIQUE, -- Clave única: no puede haber dos instrumentos con el mismo TAG
+    instrumento VARCHAR(50),
+    descripcion VARCHAR(255),
+    no_serie VARCHAR(50),
+    rango VARCHAR(50),
+
+    -- Ubicación y Configuración
+    dir_im VARCHAR(10),
+    dir_pa VARCHAR(10),
+    tarjeta VARCHAR(50),
+    var_medida VARCHAR(50),
+    comunicacion VARCHAR(20),
+    seguridad VARCHAR(10),
+
+    -- Límites y Alarmas
+    low_warning INTEGER,
+    high_warning INTEGER,
+    low_alarm INTEGER,
+    high_alarm INTEGER,
+    start_wr INTEGER, -- Rango de Trabajo (inicio)
+    end_wr INTEGER,   -- Rango de Trabajo (fin)
+    start_mr INTEGER, -- Rango de Medición (inicio)
+    end_mr INTEGER,   -- Rango de Medición (fin)
+
+    -- Calibración
+    alta_calib DATE,
+    baja_calib DATE,
+
+    -- Auditoría y Control
+    fecha_update TIMESTAMPTZ,
+    user_update VARCHAR(50),
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ==========================================
+-- ÍNDICES DE RENDIMIENTO (OPTIMIZACIÓN)
+-- ==========================================
+-- Estos índices hacen que las búsquedas en la App sean instantáneas
+
+CREATE INDEX idx_instrumentacion_tag ON instrumentacion(tag);
+CREATE INDEX idx_instrumentacion_planta ON instrumentacion(planta);
+CREATE INDEX idx_instrumentacion_instrumento ON instrumentacion(instrumento);
+CREATE INDEX idx_instrumentacion_var_medida ON instrumentacion(var_medida);
+
+-- Comentarios para documentación en la BD
+COMMENT ON TABLE instrumentacion IS 'Tabla principal de instrumentos de planta y control';
+COMMENT ON COLUMN instrumentacion.tag IS 'Etiqueta única del instrumento (ej: PT-101)';
+COMMENT ON COLUMN instrumentacion.baja_calib IS 'Fecha de vencimiento de calibración o próxima calibración';
+
+
+

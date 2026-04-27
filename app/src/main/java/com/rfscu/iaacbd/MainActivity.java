@@ -253,7 +253,9 @@ public class MainActivity extends ThemeBaseActivity implements InstrumentoFormDi
     }
 
     private void loadInstrumentos() {
-        showProgress(true);
+        if (swipeRefreshLayout != null && !swipeRefreshLayout.isRefreshing()) {
+            showProgress(true);
+        }
         RetrofitClient.getApiService(this).getInstrumentos().enqueue(new Callback<List<Instrumento>>() {
             @Override
             public void onResponse(Call<List<Instrumento>> call, Response<List<Instrumento>> response) {
