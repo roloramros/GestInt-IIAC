@@ -56,13 +56,12 @@ public class MainActivity extends ThemeBaseActivity implements InstrumentoFormDi
     private InstrumentoAdapter instrumentoAdapter;
     private FloatingActionButton fabAddInstrumento;
     private ProgressBar progressBar;
-    private androidx.swiperefreshlayout.widget.SwipeRefreshLayout swipeRefreshLayout;
 
     // Búsqueda
     private ViewGroup layoutTopBar;
     private LinearLayout layoutSearch;
     private EditText etSearch;
-    private ImageButton btnSearchToggle;
+    private ImageButton btnSearchToggle, btnSearchClose;
     private boolean isSearchVisible = false;
     private List<Instrumento> fullInstrumentoList = new ArrayList<>();
 
@@ -101,12 +100,12 @@ public class MainActivity extends ThemeBaseActivity implements InstrumentoFormDi
         rvInstrumentos = findViewById(R.id.rvInstrumentos);
         fabAddInstrumento = findViewById(R.id.fabAddInstrumento);
         progressBar = findViewById(R.id.progressBar);
-        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
 
         layoutTopBar = findViewById(R.id.layoutTopBar);
         layoutSearch = findViewById(R.id.layoutSearch);
         etSearch = findViewById(R.id.etSearch);
         btnSearchToggle = findViewById(R.id.btnSearchToggle);
+        btnSearchClose = findViewById(R.id.btnSearchClose);
     }
 
     private void setupToolbar() {
@@ -173,7 +172,19 @@ public class MainActivity extends ThemeBaseActivity implements InstrumentoFormDi
 
         btnSearchToggle.setOnClickListener(v -> toggleSearch());
 
-        swipeRefreshLayout.setOnRefreshListener(() -> loadInstrumentos());
+        btnSearchClose.setOnClickListener(v -> closeSearch());
+    }
+
+    private void closeSearch() {
+        etSearch.setText("");
+        filterInstruments("");
+        TransitionManager.beginDelayedTransition(toolbar);
+        isSearchVisible = false;
+        layoutSearch.setVisibility(View.GONE);
+        btnSearchClose.setVisibility(View.GONE);
+        btnSearchToggle.setImageResource(android.R.drawable.ic_menu_search);
+        showKeyboard(false);
+        etSearch.clearFocus();
     }
 
     private void filterByTarjeta(String tarjeta) {
@@ -188,6 +199,11 @@ public class MainActivity extends ThemeBaseActivity implements InstrumentoFormDi
                 if (response.isSuccessful() && response.body() != null) {
                     instrumentoAdapter.setInstrumentos(response.body());
                     Toast.makeText(MainActivity.this, "Filtrado por tarjeta: " + tarjeta, Toast.LENGTH_SHORT).show();
+                    // Al filtrar por tarjeta, mostramos el botón de cerrar si no está visible
+                    if (!isSearchVisible) {
+                        TransitionManager.beginDelayedTransition(toolbar);
+                        btnSearchClose.setVisibility(View.VISIBLE);
+                    }
                 } else {
                     Toast.makeText(MainActivity.this, "Error al filtrar", Toast.LENGTH_SHORT).show();
                 }
@@ -207,6 +223,7 @@ public class MainActivity extends ThemeBaseActivity implements InstrumentoFormDi
             TransitionManager.beginDelayedTransition(toolbar);
             isSearchVisible = true;
             layoutSearch.setVisibility(View.VISIBLE);
+            btnSearchClose.setVisibility(View.VISIBLE);
             btnSearchToggle.setImageResource(android.R.drawable.ic_menu_send);
             etSearch.requestFocus();
             showKeyboard(true);
@@ -219,6 +236,7 @@ public class MainActivity extends ThemeBaseActivity implements InstrumentoFormDi
                 TransitionManager.beginDelayedTransition(toolbar);
                 isSearchVisible = false;
                 layoutSearch.setVisibility(View.GONE);
+                btnSearchClose.setVisibility(View.GONE);
                 btnSearchToggle.setImageResource(android.R.drawable.ic_menu_search);
                 showKeyboard(false);
             } else {
@@ -253,14 +271,11 @@ public class MainActivity extends ThemeBaseActivity implements InstrumentoFormDi
     }
 
     private void loadInstrumentos() {
-        if (swipeRefreshLayout != null && !swipeRefreshLayout.isRefreshing()) {
-            showProgress(true);
-        }
+        showProgress(true);
         RetrofitClient.getApiService(this).getInstrumentos().enqueue(new Callback<List<Instrumento>>() {
             @Override
             public void onResponse(Call<List<Instrumento>> call, Response<List<Instrumento>> response) {
                 showProgress(false);
-                swipeRefreshLayout.setRefreshing(false);
                 if (response.isSuccessful() && response.body() != null) {
                     fullInstrumentoList = response.body();
                     // Al recargar, respetamos el filtro si existe
@@ -274,7 +289,6 @@ public class MainActivity extends ThemeBaseActivity implements InstrumentoFormDi
             @Override
             public void onFailure(Call<List<Instrumento>> call, Throwable t) {
                 showProgress(false);
-                swipeRefreshLayout.setRefreshing(false);
                 Toast.makeText(MainActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });

@@ -48,6 +48,7 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.androidx.security.crypto)
+    implementation(libs.androidx.swiperefreshlayout)
     implementation(libs.google.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -161,10 +161,24 @@ public class AdvancedSearchActivity extends ThemeBaseActivity {
         rvResultados.setLayoutManager(new LinearLayoutManager(this));
         rvResultados.setAdapter(adapter);
 
-        adapter.setOnInstrumentoClickListener(instrumento -> {
-            Intent intent = new Intent(this, InstrumentoDetailActivity.class);
-            intent.putExtra("instrumento", instrumento);
-            startActivity(intent);
+        adapter.setOnInstrumentoClickListener(new InstrumentoAdapter.OnInstrumentoClickListener() {
+            @Override
+            public void onTagClick(Instrumento instrumento) {
+                Intent intent = new Intent(AdvancedSearchActivity.this, InstrumentoDetailActivity.class);
+                intent.putExtra("instrumento", instrumento);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onTarjetaClick(Instrumento instrumento) {
+                if (instrumento.getTarjeta() != null && !instrumento.getTarjeta().isEmpty()) {
+                    // Si hacen click en una tarjeta en los resultados de búsqueda avanzada, 
+                    // simplemente forzamos una nueva búsqueda con esa tarjeta.
+                    cbTarjeta.setChecked(true);
+                    etTarjeta.setText(instrumento.getTarjeta());
+                    performSearch();
+                }
+            }
         });
     }
 
