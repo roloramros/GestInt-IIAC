@@ -99,15 +99,22 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvInstrumentos"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintTop_toBottomOf="@id/header"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:listitem="@layout/item_instrumento"/>
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvInstrumentos"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:listitem="@layout/item_instrumento"/>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <ProgressBar
             android:id="@+id/progressBar"
