@@ -36,7 +36,9 @@ import com.rfscu.iaacbd.utils.ThemeBaseActivity;
 import com.rfscu.iaacbd.utils.TokenManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -54,6 +56,7 @@ public class MainActivity extends ThemeBaseActivity implements InstrumentoFormDi
     private InstrumentoAdapter instrumentoAdapter;
     private FloatingActionButton fabAddInstrumento;
     private ProgressBar progressBar;
+    private androidx.swiperefreshlayout.widget.SwipeRefreshLayout swipeRefreshLayout;
 
     // Búsqueda
     private ViewGroup layoutTopBar;
@@ -98,6 +101,7 @@ public class MainActivity extends ThemeBaseActivity implements InstrumentoFormDi
         rvInstrumentos = findViewById(R.id.rvInstrumentos);
         fabAddInstrumento = findViewById(R.id.fabAddInstrumento);
         progressBar = findViewById(R.id.progressBar);
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
 
         layoutTopBar = findViewById(R.id.layoutTopBar);
         layoutSearch = findViewById(R.id.layoutSearch);
@@ -114,10 +118,20 @@ public class MainActivity extends ThemeBaseActivity implements InstrumentoFormDi
         rvInstrumentos.setLayoutManager(new LinearLayoutManager(this));
         rvInstrumentos.setAdapter(instrumentoAdapter);
 
-        instrumentoAdapter.setOnInstrumentoClickListener(instrumento -> {
-            Intent intent = new Intent(MainActivity.this, InstrumentoDetailActivity.class);
-            intent.putExtra("instrumento", instrumento);
-            startActivityForResult(intent, REQUEST_DETAIL);
+        instrumentoAdapter.setOnInstrumentoClickListener(new InstrumentoAdapter.OnInstrumentoClickListener() {
+            @Override
+            public void onTagClick(Instrumento instrumento) {
+                Intent intent = new Intent(MainActivity.this, InstrumentoDetailActivity.class);
+                intent.putExtra("instrumento", instrumento);
+                startActivityForResult(intent, REQUEST_DETAIL);
+            }
+
+            @Override
+            public void onTarjetaClick(Instrumento instrumento) {
+                if (instrumento.getTarjeta() != null && !instrumento.getTarjeta().isEmpty()) {
+                    filterByTarjeta(instrumento.getTarjeta());
+                }
+            }
         });
     }
 
@@ -158,6 +172,33 @@ public class MainActivity extends ThemeBaseActivity implements InstrumentoFormDi
         });
 
         btnSearchToggle.setOnClickListener(v -> toggleSearch());
+
+        swipeRefreshLayout.setOnRefreshListener(() -> loadInstrumentos());
+    }
+
+    private void filterByTarjeta(String tarjeta) {
+        showProgress(true);
+        Map<String, String> filters = new HashMap<>();
+        filters.put("tarjeta", tarjeta);
+
+        RetrofitClient.getApiService(this).searchInstrumentos(filters).enqueue(new Callback<List<Instrumento>>() {
+            @Override
+            public void onResponse(Call<List<Instrumento>> call, Response<List<Instrumento>> response) {
+                showProgress(false);
+                if (response.isSuccessful() && response.body() != null) {
+                    instrumentoAdapter.setInstrumentos(response.body());
+                    Toast.makeText(MainActivity.this, "Filtrado por tarjeta: " + tarjeta, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MainActivity.this, "Error al filtrar", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Instrumento>> call, Throwable t) {
+                showProgress(false);
+                Toast.makeText(MainActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void toggleSearch() {
@@ -217,6 +258,7 @@ public class MainActivity extends ThemeBaseActivity implements InstrumentoFormDi
             @Override
             public void onResponse(Call<List<Instrumento>> call, Response<List<Instrumento>> response) {
                 showProgress(false);
+                swipeRefreshLayout.setRefreshing(false);
                 if (response.isSuccessful() && response.body() != null) {
                     fullInstrumentoList = response.body();
                     // Al recargar, respetamos el filtro si existe
@@ -230,6 +272,7 @@ public class MainActivity extends ThemeBaseActivity implements InstrumentoFormDi
             @Override
             public void onFailure(Call<List<Instrumento>> call, Throwable t) {
                 showProgress(false);
+                swipeRefreshLayout.setRefreshing(false);
                 Toast.makeText(MainActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
