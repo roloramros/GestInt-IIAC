@@ -27,14 +27,16 @@ public class Login extends ThemeBaseActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
 
-        String token = TokenManager.getToken(this);
-        // Si el token existe y no está vacío...
-        if (token != null && !token.isEmpty()) {
-            Intent intent = new Intent(Login.this, MainActivity.class);
+        // Si el token es válido (menos de 1 hora)...
+        if (TokenManager.isLoggedIn(this)) {
+            Intent intent = new Intent(Login.this, HomeActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
             return;
+        } else {
+            // Si hay algo pero no es válido, limpiamos por seguridad
+            TokenManager.clearToken(this);
         }
 
         setContentView(R.layout.activity_login);

@@ -3,6 +3,7 @@ package com.rfscu.iaacbd.api;
 import com.rfscu.iaacbd.model.Instrumento;
 import com.rfscu.iaacbd.model.InstrumentoCreateRequest;
 import com.rfscu.iaacbd.model.InstrumentoUpdateRequest;
+import com.rfscu.iaacbd.model.HistorialAcceso;
 import com.rfscu.iaacbd.model.LoginRequest;
 import com.rfscu.iaacbd.model.LoginResponse;
 import com.rfscu.iaacbd.model.User;
@@ -53,4 +54,7 @@ public interface ApiService {
 
     @DELETE("/instrumentos/{id}")
     Call<Void> deleteInstrumento(@Path("id") int id);
+
+    @GET("/historial")
+    Call<List<HistorialAcceso>> getHistorial();
 }

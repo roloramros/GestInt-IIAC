@@ -44,8 +44,6 @@ class InstrumentoBase(BaseModel):
     end_mr: Optional[int] = None
     no_serie: Optional[str] = None
     rango: Optional[str] = None
-    alta_calib: Optional[date] = None
-    baja_calib: Optional[date] = None
 
 class InstrumentoCreate(InstrumentoBase):
     pass
@@ -57,4 +55,15 @@ class InstrumentoResponse(InstrumentoBase):
     id: int
     created_at: Optional[datetime] = None
     
+    model_config = ConfigDict(from_attributes=True)
+
+# === HISTORIAL ===
+class HistorialAccesoResponse(BaseModel):
+    id: int
+    user_id: Optional[int] = None
+    username: str
+    ip_address: str
+    login_time: datetime
+    status: str
+
     model_config = ConfigDict(from_attributes=True)

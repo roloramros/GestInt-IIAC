@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi import FastAPI, Depends, HTTPException, status, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy import select, func
@@ -12,7 +12,7 @@ import os
 from dotenv import load_dotenv
 
 from database import engine, get_db
-from models import Usuario, Instrumento
+from models import Usuario, Instrumento, HistorialAcceso
 import schemas
 
 # --- Configuración ---
@@ -91,19 +91,52 @@ def read_root():
 @app.post("/login", response_model=TokenResponse)
 async def login(
     login_data: LoginRequest,
+    request: Request,
     db: AsyncSession = Depends(get_db)
 ):
+    ip = request.client.host
     result = await db.execute(select(Usuario).where(Usuario.user_name == login_data.user_name))
     user = result.scalars().first()
     
     if not user or not verify_password(login_data.password, user.password):
+        # Registrar intento fallido
+        intento = HistorialAcceso(
+            username=login_data.user_name,
+            ip_address=ip,
+            status="failed"
+        )
+        db.add(intento)
+        await db.commit()
         raise HTTPException(status_code=401, detail="Usuario o contraseña incorrectos")
+    
+    # Registrar éxito
+    intento = HistorialAcceso(
+        user_id=user.id,
+        username=user.user_name,
+        ip_address=ip,
+        status="success"
+    )
+    db.add(intento)
     
     user.last_login = datetime.now(timezone.utc)
     await db.commit()
     
     token = create_access_token(data={"sub": user.user_name, "rol": user.rol})
     return TokenResponse(access_token=token)
+
+# ==========================================
+# HISTORIAL DE ACCESOS
+# ==========================================
+
+@app.get("/historial", response_model=list[schemas.HistorialAccesoResponse])
+async def listar_historial(
+    admin: Usuario = Depends(get_current_admin),
+    db: AsyncSession = Depends(get_db)
+):
+    result = await db.execute(
+        select(HistorialAcceso).order_by(HistorialAcceso.login_time.desc()).limit(100)
+    )
+    return result.scalars().all()
 
 # ==========================================
 # CRUD USUARIOS (Solo Admin)
@@ -198,6 +231,12 @@ async def eliminar_usuario(
 async def get_instrumentos(
     tag: Optional[str] = None,
     planta: Optional[str] = None,
+    instrumento: Optional[str] = None,
+    tarjeta: Optional[str] = None,
+    dir_im: Optional[str] = None,
+    dir_pa: Optional[str] = None,
+    var_medida: Optional[str] = None,
+    comunicacion: Optional[str] = None,
     db: AsyncSession = Depends(get_db),
     current_user: Usuario = Depends(get_current_user)
 ):
@@ -206,9 +245,40 @@ async def get_instrumentos(
         stmt = stmt.where(Instrumento.tag.ilike(f"%{tag}%"))
     if planta:
         stmt = stmt.where(Instrumento.planta == planta)
+    if instrumento:
+        stmt = stmt.where(Instrumento.instrumento == instrumento)
+    if tarjeta:
+        stmt = stmt.where(Instrumento.tarjeta.ilike(f"%{tarjeta}%"))
+    if dir_im:
+        stmt = stmt.where(Instrumento.dir_im.ilike(f"%{dir_im}%"))
+    if dir_pa:
+        stmt = stmt.where(Instrumento.dir_pa.ilike(f"%{dir_pa}%"))
+    if var_medida:
+        stmt = stmt.where(Instrumento.var_medida == var_medida)
+    if comunicacion:
+        stmt = stmt.where(Instrumento.comunicacion == comunicacion)
     
     result = await db.execute(stmt.order_by(Instrumento.tag))
     return result.scalars().all()
+
+@app.get("/instrumentos/filtros/distintos")
+async def get_distinct_values(
+    db: AsyncSession = Depends(get_db),
+    current_user: Usuario = Depends(get_current_user)
+):
+    try:
+        fields = ["planta", "instrumento", "var_medida", "comunicacion"]
+        response = {}
+        for field in fields:
+            column = getattr(Instrumento, field)
+            stmt = select(column).distinct().where(column != None)
+            result = await db.execute(stmt)
+            values = result.scalars().all()
+            response[field] = sorted([str(v) for v in values if v])
+        return response
+    except Exception as e:
+        print(f"Error in distinct_values: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/instrumentos/{instrumento_id}", response_model=schemas.InstrumentoResponse)
 async def get_instrumento(

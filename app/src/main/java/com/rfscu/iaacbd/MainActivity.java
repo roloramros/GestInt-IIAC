@@ -158,6 +158,9 @@ public class MainActivity extends ThemeBaseActivity implements InstrumentoFormDi
             } else if (id == R.id.nav_user_management) {
                 Intent intent = new Intent(MainActivity.this, UserManagementActivity.class);
                 startActivity(intent);
+            } else if (id == R.id.nav_historial) {
+                Intent intent = new Intent(MainActivity.this, HistorialActivity.class);
+                startActivity(intent);
             }
             drawerLayout.closeDrawer(GravityCompat.START);
             return true;

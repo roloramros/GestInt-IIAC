@@ -113,6 +113,9 @@ public class UserManagementActivity extends ThemeBaseActivity implements UserAda
                 startActivity(intent);
             } else if (id == R.id.nav_user_management) {
                 // Ya estamos aquí
+            } else if (id == R.id.nav_historial) {
+                Intent intent = new Intent(this, HistorialActivity.class);
+                startActivity(intent);
             }
             drawerLayout.closeDrawer(GravityCompat.START);
             return true;
@@ -128,7 +131,13 @@ public class UserManagementActivity extends ThemeBaseActivity implements UserAda
     }
 
     private void setupListeners() {
-        btnAddUser.setOnClickListener(v -> showUserDialog(null));
+        String role = TokenManager.getRole(this);
+        if ("propietario".equalsIgnoreCase(role)) {
+            btnAddUser.setVisibility(View.VISIBLE);
+            btnAddUser.setOnClickListener(v -> showUserDialog(null));
+        } else {
+            btnAddUser.setVisibility(View.GONE);
+        }
     }
 
     private void loadUsers() {
@@ -171,6 +180,7 @@ public class UserManagementActivity extends ThemeBaseActivity implements UserAda
 
     private void showUserDialog(User user) {
         editingUserId = user != null ? user.getId() : null;
+        String currentUserRole = TokenManager.getRole(this);
         
         LayoutInflater inflater = LayoutInflater.from(this);
         View dialogView = inflater.inflate(R.layout.dialog_user_form, null);
@@ -182,9 +192,10 @@ public class UserManagementActivity extends ThemeBaseActivity implements UserAda
         btnCancel = dialogView.findViewById(R.id.btnCancel);
         
         TextInputLayout tilPassword = dialogView.findViewById(R.id.tilPassword);
+        TextInputLayout tilRole = dialogView.findViewById(R.id.tilRole);
         
         // Configurar dropdown de roles
-        String[] roles = {"admin", "usuario"};
+        String[] roles = {"admin", "usuario", "propietario"};
         ArrayAdapter<String> roleAdapter = new ArrayAdapter<>(this, 
             android.R.layout.simple_dropdown_item_1line, roles);
         etRole.setAdapter(roleAdapter);
@@ -192,10 +203,21 @@ public class UserManagementActivity extends ThemeBaseActivity implements UserAda
         if (user != null) {
             // Modo edición
             etUsername.setText(user.getUsername());
+            etUsername.setEnabled(false); // Bloquear nombre de usuario
+            
             etRole.setText(user.getRole() != null ? user.getRole() : "", false);
+            // Solo propietario puede cambiar el rol
+            boolean isPropietario = "propietario".equalsIgnoreCase(currentUserRole);
+            etRole.setEnabled(isPropietario);
+            if (tilRole != null) {
+                tilRole.setEnabled(isPropietario);
+            }
+
             tilPassword.setHint("Nueva contraseña (dejar vacío si no cambia)");
         } else {
-            // Modo creación
+            // Modo creación (Solo accesible para propietario por el botón, pero por seguridad...)
+            etUsername.setEnabled(true);
+            etRole.setEnabled(true);
             tilPassword.setHint("Contraseña");
         }
         

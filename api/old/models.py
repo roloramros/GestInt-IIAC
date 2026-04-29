@@ -38,6 +38,14 @@ class Instrumento(Base):
     end_mr = Column(Integer, nullable=True)
     no_serie = Column(String(50), nullable=True)
     rango = Column(String(50), nullable=True)
-    alta_calib = Column(Date, nullable=True)       # ✅ Ahora Date está importado
-    baja_calib = Column(Date, nullable=True)       # ✅
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=True)
+
+class HistorialAcceso(Base):
+    __tablename__ = "historial_accesos"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, nullable=True)
+    username = Column(String(50), nullable=False)
+    ip_address = Column(String(45), nullable=False)
+    login_time = Column(DateTime(timezone=True), server_default=func.now())
+    status = Column(String(10), default="success")

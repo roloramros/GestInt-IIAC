@@ -60,9 +60,19 @@ public class DrawerHelper {
         }
 
         // 3. Update Menu Visibility
+        boolean isAdmin = "admin".equalsIgnoreCase(role);
+        boolean isPropietario = "propietario".equalsIgnoreCase(role);
+        boolean isAdminOrOwner = isAdmin || isPropietario;
+
         MenuItem userMgmtItem = navView.getMenu().findItem(R.id.nav_user_management);
         if (userMgmtItem != null) {
-            userMgmtItem.setVisible("admin".equalsIgnoreCase(role));
+            userMgmtItem.setVisible(isAdminOrOwner);
+        }
+
+        MenuItem historialItem = navView.getMenu().findItem(R.id.nav_historial);
+        if (historialItem != null) {
+            // Solo propietario puede ver el historial
+            historialItem.setVisible(isPropietario);
         }
     }
 

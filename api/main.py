@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi import FastAPI, Depends, HTTPException, status, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy import select, func
@@ -12,7 +12,7 @@ import os
 from dotenv import load_dotenv
 
 from database import engine, get_db
-from models import Usuario, Instrumento
+from models import Usuario, Instrumento, HistorialAcceso
 import schemas
 
 # --- Configuración ---
@@ -79,11 +79,19 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: AsyncSession
     return user
 
 def get_current_admin(current_user: Usuario = Depends(get_current_user)):
-    if current_user.rol != "admin":
-        raise HTTPException(status_code=403, detail="Permisos insuficientes. Se requiere rol 'admin'")
+    role = current_user.rol.lower().strip() if current_user.rol else ""
+    if role not in ["admin", "propietario"]:
+        raise HTTPException(status_code=403, detail="Permisos insuficientes. Se requiere rol 'admin' o 'propietario'")
+    return current_user
+
+def get_current_propietario(current_user: Usuario = Depends(get_current_user)):
+    role = current_user.rol.lower().strip() if current_user.rol else ""
+    if role != "propietario":
+        raise HTTPException(status_code=403, detail="Permisos insuficientes. Se requiere rol 'propietario'")
     return current_user
 
 # --- Rutas Públicas ---
+# ... (read_root y login) ...
 @app.get("/")
 def read_root():
     return {"msg": "API corriendo. Ve a /docs para probar endpoints."}
@@ -91,19 +99,60 @@ def read_root():
 @app.post("/login", response_model=TokenResponse)
 async def login(
     login_data: LoginRequest,
+    request: Request,
     db: AsyncSession = Depends(get_db)
 ):
+    ip = request.client.host
     result = await db.execute(select(Usuario).where(Usuario.user_name == login_data.user_name))
     user = result.scalars().first()
     
     if not user or not verify_password(login_data.password, user.password):
+        try:
+            # Registrar intento fallido
+            intento = HistorialAcceso(
+                username=login_data.user_name,
+                ip_address=ip,
+                status="failed"
+            )
+            db.add(intento)
+            await db.commit()
+        except Exception as e:
+            print(f"Error al registrar historial fallido: {e}")
+            await db.rollback()
+            
         raise HTTPException(status_code=401, detail="Usuario o contraseña incorrectos")
     
+    try:
+        # Registrar éxito
+        intento = HistorialAcceso(
+            user_id=user.id,
+            username=user.user_name,
+            ip_address=ip,
+            status="success"
+        )
+        db.add(intento)
+    except Exception as e:
+        print(f"Error al registrar historial exitoso: {e}")
+
     user.last_login = datetime.now(timezone.utc)
     await db.commit()
     
     token = create_access_token(data={"sub": user.user_name, "rol": user.rol})
     return TokenResponse(access_token=token)
+
+# ==========================================
+# HISTORIAL DE ACCESOS
+# ==========================================
+
+@app.get("/historial", response_model=list[schemas.HistorialAccesoResponse])
+async def listar_historial(
+    propietario: Usuario = Depends(get_current_propietario),
+    db: AsyncSession = Depends(get_db)
+):
+    result = await db.execute(
+        select(HistorialAcceso).order_by(HistorialAcceso.login_time.desc()).limit(100)
+    )
+    return result.scalars().all()
 
 # ==========================================
 # CRUD USUARIOS (Solo Admin)
@@ -112,7 +161,7 @@ async def login(
 @app.post("/usuarios", response_model=schemas.UsuarioResponse, status_code=201)
 async def crear_usuario(
     data: schemas.UsuarioCreate,
-    admin: Usuario = Depends(get_current_admin),
+    propietario: Usuario = Depends(get_current_propietario),
     db: AsyncSession = Depends(get_db)
 ):
     exists = await db.execute(select(Usuario).where(Usuario.user_name == data.user_name))
@@ -153,7 +202,7 @@ async def obtener_usuario(
 async def actualizar_usuario(
     user_id: int,
     data: schemas.UsuarioUpdate,
-    admin: Usuario = Depends(get_current_admin),
+    current_admin: Usuario = Depends(get_current_admin),
     db: AsyncSession = Depends(get_db)
 ):
     result = await db.execute(select(Usuario).where(Usuario.id == user_id))
@@ -162,7 +211,11 @@ async def actualizar_usuario(
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
     
     if data.rol is not None:
+        # Solo el propietario puede cambiar el rol
+        if current_admin.rol.lower().strip() != "propietario" and data.rol != user.rol:
+            raise HTTPException(status_code=403, detail="Solo el propietario puede cambiar roles")
         user.rol = data.rol
+        
     if data.password is not None:
         user.password = hash_password(data.password)
     
@@ -181,10 +234,10 @@ async def eliminar_usuario(
     if not user:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
     
-    if user.rol == "admin":
-        admins = await db.execute(select(Usuario).where(Usuario.rol == "admin"))
+    if user.rol in ["admin", "propietario"]:
+        admins = await db.execute(select(Usuario).where(Usuario.rol.in_(["admin", "propietario"])))
         if len(admins.scalars().all()) <= 1:
-            raise HTTPException(status_code=400, detail="No puedes eliminar al único administrador")
+            raise HTTPException(status_code=400, detail="No puedes eliminar al único administrador o propietario")
     
     await db.delete(user)
     await db.commit()

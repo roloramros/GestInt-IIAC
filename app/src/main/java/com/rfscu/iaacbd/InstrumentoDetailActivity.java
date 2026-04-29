@@ -80,7 +80,7 @@ public class InstrumentoDetailActivity extends ThemeBaseActivity implements Inst
         // Pulsación larga: Mostrar/Ocultar menú (Versión Simple)
         fabBack.setOnLongClickListener(v -> {
             String userRole = TokenManager.getRole(this);
-            if ("admin".equalsIgnoreCase(userRole)) {
+            if ("admin".equalsIgnoreCase(userRole) || "propietario".equalsIgnoreCase(userRole)) {
                 toggleFabMenu();
             } else {
                 Toast.makeText(this, "Solo administradores pueden editar o eliminar", Toast.LENGTH_SHORT).show();

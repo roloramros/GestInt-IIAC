@@ -124,6 +124,9 @@ public class HomeActivity extends ThemeBaseActivity {
             } else if (id == R.id.nav_user_management) {
                 Intent intent = new Intent(this, UserManagementActivity.class);
                 startActivity(intent);
+            } else if (id == R.id.nav_historial) {
+                Intent intent = new Intent(this, HistorialActivity.class);
+                startActivity(intent);
             }
             drawerLayout.closeDrawer(GravityCompat.START);
             return true;

@@ -10,6 +10,7 @@ import java.security.GeneralSecurityException;
 public class TokenManager {
     private static final String PREF_NAME = "secure_app_prefs";
     private static final String KEY_TOKEN = "jwt_token";
+    private static final String KEY_LAST_LOGIN = "last_login_time";
 
     // 🔹 Nuevas claves para datos del usuario
     private static final String KEY_USERNAME = "username";
@@ -41,12 +42,24 @@ public class TokenManager {
         getSecurePreferences(context)
                 .edit()
                 .putString(KEY_TOKEN, token)
+                .putLong(KEY_LAST_LOGIN, System.currentTimeMillis())
                 .apply();
     }
 
     public static String getToken(Context context) {
         return getSecurePreferences(context)
                 .getString(KEY_TOKEN, null);
+    }
+
+    public static boolean isTokenValid(Context context) {
+        String token = getToken(context);
+        if (token == null || token.isEmpty()) return false;
+
+        long lastLogin = getSecurePreferences(context).getLong(KEY_LAST_LOGIN, 0);
+        long currentTime = System.currentTimeMillis();
+        
+        // 1 hora = 3600000 milisegundos
+        return (currentTime - lastLogin) < 3600000;
     }
 
     // ─────────────────────────────────────────────────────
@@ -84,6 +97,7 @@ public class TokenManager {
         getSecurePreferences(context)
                 .edit()
                 .remove(KEY_TOKEN)
+                .remove(KEY_LAST_LOGIN)
                 .remove(KEY_USERNAME)
                 .remove(KEY_USER_ID)
                 .remove(KEY_ROLE)
@@ -91,7 +105,6 @@ public class TokenManager {
     }
 
     public static boolean isLoggedIn(Context context) {
-        String token = getToken(context);
-        return token != null && !token.isEmpty();
+        return isTokenValid(context);
     }
 }
