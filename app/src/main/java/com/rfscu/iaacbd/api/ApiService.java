@@ -57,4 +57,10 @@ public interface ApiService {
 
     @GET("/historial")
     Call<List<HistorialAcceso>> getHistorial();
+
+    @GET("/historial")
+    Call<List<HistorialAcceso>> getFilteredHistorial(
+        @retrofit2.http.Query("username") String username,
+        @retrofit2.http.Query("fecha") String fecha
+    );
 }
