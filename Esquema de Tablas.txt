@@ -1,0 +1,103 @@
+Table "public.usuarios"
+   Column   |           Type           | Collation | Nullable |               Default
+------------+--------------------------+-----------+----------+--------------------------------------
+ id         | integer                  |           | not null | nextval('usuarios_id_seq'::regclass)
+ user_name  | character varying(50)    |           | not null |
+ password   | character varying(255)   |           | not null |
+ rol        | character varying(20)    |           |          | 'usuario'::character varying
+ last_login | timestamp with time zone |           |          | CURRENT_TIMESTAMP
+Indexes:
+    "usuarios_pkey" PRIMARY KEY, btree (id)
+    "usuarios_user_name_key" UNIQUE CONSTRAINT, btree (user_name)
+Check constraints:
+    "usuarios_rol_check" CHECK (rol::text = ANY (ARRAY['admin'::character varying, 'usuario'::character varying, 'propietario'::character varying]::text[]))
+Referenced by:
+    TABLE "historial_accesos" CONSTRAINT "historial_accesos_user_id_fkey" FOREIGN KEY (user_id) REFERENCES usuarios(id) ON DELETE SET NULL
+
+
+
+
+
+
+
+
+Table "public.instrumentacion"
+    Column    |           Type           | Collation | Nullable |                   Default
+--------------+--------------------------+-----------+----------+---------------------------------------------
+ id           | integer                  |           | not null | nextval('instrumentacion_id_seq'::regclass)
+ planta       | character varying(5)     |           |          |
+ tag          | character varying(50)    |           | not null |
+ dir_im       | character varying(5)     |           |          |
+ dir_pa       | character varying(5)     |           |          |
+ tarjeta      | character varying(50)    |           |          |
+ var_medida   | character varying(50)    |           |          |
+ instrumento  | character varying(50)    |           |          |
+ comunicacion | character varying(10)    |           |          |
+ seguridad    | character varying(5)     |           |          |
+ descripcion  | character varying(255)   |           |          |
+ fecha_update | timestamp with time zone |           |          |
+ user_update  | character varying(50)    |           |          |
+ low_warning  | integer                  |           |          |
+ high_warning | integer                  |           |          |
+ low_alarm    | integer                  |           |          |
+ high_alarm   | integer                  |           |          |
+ start_wr     | integer                  |           |          |
+ end_wr       | integer                  |           |          |
+ start_mr     | integer                  |           |          |
+ end_mr       | integer                  |           |          |
+ no_serie     | character varying(50)    |           |          |
+ rango        | character varying(50)    |           |          |
+ created_at   | timestamp with time zone |           |          | CURRENT_TIMESTAMP
+Indexes:
+    "instrumentacion_pkey" PRIMARY KEY, btree (id)
+    "idx_instrumentacion_instrumento" btree (instrumento)
+    "idx_instrumentacion_planta" btree (planta)
+    "idx_instrumentacion_tag" btree (tag)
+    "idx_unique_no_serie" UNIQUE, btree (no_serie) WHERE no_serie IS NOT NULL
+Referenced by:
+    TABLE "certificados_calibracion" CONSTRAINT "fk_cert_instrumento" FOREIGN KEY (id_instrumento) REFERENCES instrumentacion(id) ON DELETE CASCADE
+
+
+
+
+
+
+
+Table "public.certificados_calibracion"
+     Column     |           Type           | Collation | Nullable |                       Default
+----------------+--------------------------+-----------+----------+------------------------------------------------------
+ id             | integer                  |           | not null | nextval('certificados_calibracion_id_seq'::regclass)
+ no_certificado | character varying(50)    |           | not null |
+ id_instrumento | integer                  |           | not null |
+ estado_tecnico | character varying(50)    |           |          |
+ observaciones  | text                     |           |          |
+ fecha          | timestamp with time zone |           |          |
+Indexes:
+    "certificados_calibracion_pkey" PRIMARY KEY, btree (id)
+    "idx_cert_instrumento" btree (id_instrumento)
+    "unique_no_certificado" UNIQUE CONSTRAINT, btree (no_certificado)
+Foreign-key constraints:
+    "fk_cert_instrumento" FOREIGN KEY (id_instrumento) REFERENCES instrumentacion(id) ON DELETE CASCADE
+
+
+
+
+
+
+ Table "public.historial_accesos"
+   Column   |           Type           | Collation | Nullable |                    Default
+------------+--------------------------+-----------+----------+-----------------------------------------------
+ id         | integer                  |           | not null | nextval('historial_accesos_id_seq'::regclass)
+ user_id    | integer                  |           |          |
+ username   | character varying(50)    |           | not null |
+ ip_address | character varying(45)    |           | not null |
+ login_time | timestamp with time zone |           |          | CURRENT_TIMESTAMP
+ status     | character varying(10)    |           |          | 'success'::character varying
+Indexes:
+    "historial_accesos_pkey" PRIMARY KEY, btree (id)
+    "idx_historial_fecha" btree (login_time DESC)
+    "idx_historial_user" btree (user_id)
+Check constraints:
+    "historial_accesos_status_check" CHECK (status::text = ANY (ARRAY['success'::character varying, 'failed'::character varying]::text[]))
+Foreign-key constraints:
+    "historial_accesos_user_id_fkey" FOREIGN KEY (user_id) REFERENCES usuarios(id) ON DELETE SET NULL

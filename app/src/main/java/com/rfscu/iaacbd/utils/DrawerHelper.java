@@ -4,11 +4,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 import com.rfscu.iaacbd.Login;
@@ -29,6 +33,54 @@ public class DrawerHelper {
 
         // Setup Dark Mode Toggle
         setupDarkModeToggle(activity, navView);
+    }
+
+    public static void setupNavigationListener(Activity activity, NavigationView navView, DrawerLayout drawerLayout) {
+        if (navView == null || drawerLayout == null) return;
+
+        navView.setNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+
+            // Toggle Calibration Submenu
+            if (id == R.id.nav_calibration) {
+                Menu menu = navView.getMenu();
+                // Check visibility of one of the items in the group to toggle the group
+                boolean isVisible = menu.findItem(R.id.nav_calibration_monthly).isVisible();
+                menu.setGroupVisible(R.id.nav_calibration_group, !isVisible);
+                return true; // Keep drawer open
+            }
+
+            // Standard Navigation
+            Intent intent = null;
+            if (id == R.id.nav_home) {
+                intent = new Intent(activity, com.rfscu.iaacbd.HomeActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            } else if (id == R.id.nav_list) {
+                intent = new Intent(activity, com.rfscu.iaacbd.MainActivity.class);
+            } else if (id == R.id.nav_advanced_search) {
+                intent = new Intent(activity, com.rfscu.iaacbd.AdvancedSearchActivity.class);
+            } else if (id == R.id.nav_user_management) {
+                intent = new Intent(activity, com.rfscu.iaacbd.UserManagementActivity.class);
+            } else if (id == R.id.nav_historial) {
+                intent = new Intent(activity, com.rfscu.iaacbd.HistorialActivity.class);
+            } else if (id == R.id.nav_calibration_monthly) {
+                intent = new Intent(activity, com.rfscu.iaacbd.MonthlyPlansActivity.class);
+            } else if (id == R.id.nav_calibration_update) {
+                intent = new Intent(activity, com.rfscu.iaacbd.UpdateCertsActivity.class);
+            } else if (id == R.id.nav_calibration_history) {
+                intent = new Intent(activity, com.rfscu.iaacbd.CertsHistoryActivity.class);
+            }
+
+            if (intent != null) {
+                // Prevent starting the same activity if we are already there
+                if (!activity.getClass().getName().equals(intent.getComponent().getClassName())) {
+                    activity.startActivity(intent);
+                }
+            }
+
+            drawerLayout.closeDrawer(GravityCompat.START);
+            return true;
+        });
     }
 
     private static void loadDrawerUserInfo(Activity activity, NavigationView navView) {
@@ -73,6 +125,14 @@ public class DrawerHelper {
         if (historialItem != null) {
             // Solo propietario puede ver el historial
             historialItem.setVisible(isPropietario);
+        }
+
+        // 4. Auto-expand Calibration Submenu if in one of its activities
+        String activityName = activity.getClass().getSimpleName();
+        if (activityName.equals("MonthlyPlansActivity") || 
+            activityName.equals("UpdateCertsActivity") || 
+            activityName.equals("CertsHistoryActivity")) {
+            navView.getMenu().setGroupVisible(R.id.nav_calibration_group, true);
         }
     }
 

@@ -143,39 +143,7 @@ public class MainActivity extends ThemeBaseActivity implements InstrumentoFormDi
     }
 
     private void setupListeners() {
-        navView.setNavigationItemSelectedListener(item -> {
-            int id = item.getItemId();
-            if (id == R.id.nav_home) {
-                Intent intent = new Intent(this, HomeActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                finish();
-            } else if (id == R.id.nav_list) {
-                // Ya estamos aquí
-            } else if (id == R.id.nav_advanced_search) {
-                Intent intent = new Intent(MainActivity.this, AdvancedSearchActivity.class);
-                startActivity(intent);
-            } else if (id == R.id.nav_calibration_monthly) {
-                Intent intent = new Intent(this, MonthlyPlansActivity.class);
-                startActivity(intent);
-            } else if (id == R.id.nav_calibration_update) {
-                Intent intent = new Intent(this, UpdateCertsActivity.class);
-                startActivity(intent);
-            } else if (id == R.id.nav_calibration_history) {
-                Intent intent = new Intent(this, CertsHistoryActivity.class);
-                startActivity(intent);
-            } else if (id == R.id.nav_user_management) {
-                Intent intent = new Intent(MainActivity.this, UserManagementActivity.class);
-                startActivity(intent);
-            } else if (id == R.id.nav_historial) {
-                Intent intent = new Intent(MainActivity.this, HistorialActivity.class);
-                startActivity(intent);
-            }
-            drawerLayout.closeDrawer(GravityCompat.START);
-            return true;
-        });
-
-        DrawerHelper.setupDrawer(this, navView, btnLogoutDrawer);
+        setupDrawer();
 
         fabAddInstrumento.setOnClickListener(v -> {
             InstrumentoFormDialog dialog = new InstrumentoFormDialog(this, this);
@@ -186,6 +154,12 @@ public class MainActivity extends ThemeBaseActivity implements InstrumentoFormDi
 
         btnSearchClose.setOnClickListener(v -> closeSearch());
     }
+
+    private void setupDrawer() {
+        DrawerHelper.setupNavigationListener(this, navView, drawerLayout);
+        DrawerHelper.setupDrawer(this, navView, btnLogoutDrawer);
+    }
+
 
     private void closeSearch() {
         etSearch.setText("");

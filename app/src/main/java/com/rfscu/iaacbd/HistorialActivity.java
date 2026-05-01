@@ -187,40 +187,10 @@ public class HistorialActivity extends ThemeBaseActivity {
     }
 
     private void setupDrawer() {
-        navView.setNavigationItemSelectedListener(item -> {
-            int id = item.getItemId();
-            if (id == R.id.nav_home) {
-                Intent intent = new Intent(this, HomeActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                finish();
-            } else if (id == R.id.nav_list) {
-                Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
-            } else if (id == R.id.nav_advanced_search) {
-                Intent intent = new Intent(this, AdvancedSearchActivity.class);
-                startActivity(intent);
-            } else if (id == R.id.nav_calibration_monthly) {
-                Intent intent = new Intent(this, MonthlyPlansActivity.class);
-                startActivity(intent);
-            } else if (id == R.id.nav_calibration_update) {
-                Intent intent = new Intent(this, UpdateCertsActivity.class);
-                startActivity(intent);
-            } else if (id == R.id.nav_calibration_history) {
-                Intent intent = new Intent(this, CertsHistoryActivity.class);
-                startActivity(intent);
-            } else if (id == R.id.nav_user_management) {
-                Intent intent = new Intent(this, UserManagementActivity.class);
-                startActivity(intent);
-            } else if (id == R.id.nav_historial) {
-                // Ya estamos aquí
-            }
-            drawerLayout.closeDrawer(GravityCompat.START);
-            return true;
-        });
-
+        DrawerHelper.setupNavigationListener(this, navView, drawerLayout);
         DrawerHelper.setupDrawer(this, navView, btnLogoutDrawer);
     }
+
 
     private void setupRecyclerView() {
         adapter = new HistorialAdapter();
