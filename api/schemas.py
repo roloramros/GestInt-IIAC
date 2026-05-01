@@ -90,3 +90,16 @@ class CertificadoResponse(CertificadoBase):
     id: int
     
     model_config = ConfigDict(from_attributes=True)
+
+class CertificadoDetailedResponse(BaseModel):
+    id: int
+    no_certificado: str
+    estado_tecnico: Optional[str] = None
+    observaciones: Optional[str] = None
+    fecha: Optional[datetime] = None
+    no_serie: Optional[str] = None
+    instrumento: Optional[str] = None
+    descripcion: Optional[str] = None
+    rango: Optional[str] = None
+
+    model_config = ConfigDict(from_attributes=True)

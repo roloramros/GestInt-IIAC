@@ -167,6 +167,53 @@ async def listar_historial(
     return result.scalars().all()
 
 # ==========================================
+# CERTIFICADOS DE CALIBRACIÓN
+# ==========================================
+
+@app.get("/certificados", response_model=list[schemas.CertificadoDetailedResponse])
+async def get_certificados(
+    no_certificado: Optional[str] = None,
+    no_serie: Optional[str] = None,
+    db: AsyncSession = Depends(get_db),
+    current_user: Usuario = Depends(get_current_user)
+):
+    from models import CertificadoCalibracion, Instrumento
+    stmt = select(
+        CertificadoCalibracion.id,
+        CertificadoCalibracion.no_certificado,
+        CertificadoCalibracion.estado_tecnico,
+        CertificadoCalibracion.observaciones,
+        CertificadoCalibracion.fecha,
+        Instrumento.no_serie,
+        Instrumento.instrumento,
+        Instrumento.descripcion,
+        Instrumento.rango
+    ).join(Instrumento, CertificadoCalibracion.id_instrumento == Instrumento.id)
+
+    if no_certificado:
+        stmt = stmt.where(CertificadoCalibracion.no_certificado.ilike(f"%{no_certificado}%"))
+    if no_serie:
+        stmt = stmt.where(Instrumento.no_serie.ilike(f"%{no_serie}%"))
+
+    result = await db.execute(stmt.order_by(CertificadoCalibracion.fecha.desc()))
+    
+    # Map raw rows to Pydantic models
+    certs = []
+    for row in result.all():
+        certs.append(schemas.CertificadoDetailedResponse(
+            id=row.id,
+            no_certificado=row.no_certificado,
+            estado_tecnico=row.estado_tecnico,
+            observaciones=row.observaciones,
+            fecha=row.fecha,
+            no_serie=row.no_serie,
+            instrumento=row.instrumento,
+            descripcion=row.descripcion,
+            rango=row.rango
+        ))
+    return certs
+
+# ==========================================
 # CRUD USUARIOS (Solo Admin)
 # ==========================================
 
