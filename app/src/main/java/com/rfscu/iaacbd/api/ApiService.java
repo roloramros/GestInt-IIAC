@@ -3,6 +3,7 @@ package com.rfscu.iaacbd.api;
 import com.rfscu.iaacbd.model.Instrumento;
 import com.rfscu.iaacbd.model.InstrumentoCreateRequest;
 import com.rfscu.iaacbd.model.InstrumentoUpdateRequest;
+import com.rfscu.iaacbd.model.Certificado;
 import com.rfscu.iaacbd.model.HistorialAcceso;
 import com.rfscu.iaacbd.model.LoginRequest;
 import com.rfscu.iaacbd.model.LoginResponse;
@@ -62,5 +63,11 @@ public interface ApiService {
     Call<List<HistorialAcceso>> getFilteredHistorial(
         @retrofit2.http.Query("username") String username,
         @retrofit2.http.Query("fecha") String fecha
+    );
+
+    @GET("/certificados")
+    Call<List<Certificado>> getCertificados(
+        @retrofit2.http.Query("no_certificado") String noCertificado,
+        @retrofit2.http.Query("no_serie") String noSerie
     );
 }
