@@ -16,7 +16,19 @@
         <item
             android:id="@+id/nav_calibration"
             android:icon="@android:drawable/ic_menu_recent_history"
-            android:title="Planes de Calibración" />
+            android:title="Planes de Calibración">
+            <menu>
+                <item
+                    android:id="@+id/nav_calibration_monthly"
+                    android:title="@string/menu_calibration_monthly" />
+                <item
+                    android:id="@+id/nav_calibration_update"
+                    android:title="@string/menu_calibration_update" />
+                <item
+                    android:id="@+id/nav_calibration_history"
+                    android:title="@string/menu_calibration_history" />
+            </menu>
+        </item>
         <item
             android:id="@+id/nav_sync_bd"
             android:icon="@android:drawable/ic_popup_sync"

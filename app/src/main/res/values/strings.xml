@@ -46,6 +46,11 @@
     <string name="error_creating_instrument">Error al crear instrumento</string>
     <string name="error_loading_instruments">Error al cargar instrumentos</string>
 
+    <!-- Calibration Menu -->
+    <string name="menu_calibration_monthly">Planes Mensuales</string>
+    <string name="menu_calibration_update">Actualización de Certificados</string>
+    <string name="menu_calibration_history">Historial de Certificados</string>
+
     <string name="filter_by_user">Filtrar por Usuario</string>
     <string name="filter_by_date">Filtrar por Fecha</string>
     <string name="select_date">Seleccionar Fecha</string>
