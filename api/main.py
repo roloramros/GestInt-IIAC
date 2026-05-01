@@ -132,6 +132,7 @@ async def login(
         )
         db.add(intento)
     except Exception as e:
+        await db.rollback()
         print(f"Error al registrar historial exitoso: {e}")
 
     user.last_login = datetime.now(timezone.utc)
@@ -146,11 +147,22 @@ async def login(
 
 @app.get("/historial", response_model=list[schemas.HistorialAccesoResponse])
 async def listar_historial(
-    propietario: Usuario = Depends(get_current_propietario),
+    username: Optional[str] = None,
+    fecha: Optional[date] = None,
+    admin: Usuario = Depends(get_current_admin),
     db: AsyncSession = Depends(get_db)
 ):
+    stmt = select(HistorialAcceso)
+    if username:
+        stmt = stmt.where(HistorialAcceso.username == username)
+    if fecha:
+        # Filtrar por el rango del día completo (timezone-aware UTC)
+        start_dt = datetime.combine(fecha, datetime.min.time()).replace(tzinfo=timezone.utc)
+        end_dt = datetime.combine(fecha, datetime.max.time()).replace(tzinfo=timezone.utc)
+        stmt = stmt.where(HistorialAcceso.login_time.between(start_dt, end_dt))
+        
     result = await db.execute(
-        select(HistorialAcceso).order_by(HistorialAcceso.login_time.desc()).limit(100)
+        stmt.order_by(HistorialAcceso.login_time.desc()).limit(200)
     )
     return result.scalars().all()
 
@@ -298,7 +310,7 @@ async def get_distinct_values(
         return response
     except Exception as e:
         print(f"Error in distinct_values: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Error al obtener los valores distintos")
 
 @app.get("/instrumentos/{instrumento_id}", response_model=schemas.InstrumentoResponse)
 async def get_instrumento(
@@ -345,7 +357,7 @@ async def create_instrumento(
     except Exception as e:
         await db.rollback()
         print(f"❌ ERROR POST /instrumentos: {type(e).__name__} - {str(e)}")
-        raise HTTPException(status_code=400, detail=f"Error: {str(e)}")
+        raise HTTPException(status_code=400, detail="Error al crear el instrumento")
 @app.put("/instrumentos/{instrumento_id}", response_model=schemas.InstrumentoResponse)
 async def update_instrumento(
     instrumento_id: int,
