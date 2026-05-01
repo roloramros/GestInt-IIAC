@@ -67,3 +67,26 @@ class HistorialAccesoResponse(BaseModel):
     status: str
 
     model_config = ConfigDict(from_attributes=True)
+
+# === CERTIFICADOS DE CALIBRACIÓN ===
+class CertificadoBase(BaseModel):
+    no_certificado: str
+    id_instrumento: int
+    estado_tecnico: Optional[str] = None
+    observaciones: Optional[str] = None
+    fecha: Optional[datetime] = None
+
+class CertificadoCreate(CertificadoBase):
+    pass
+
+class CertificadoUpdate(BaseModel):
+    no_certificado: Optional[str] = None
+    id_instrumento: Optional[int] = None
+    estado_tecnico: Optional[str] = None
+    observaciones: Optional[str] = None
+    fecha: Optional[datetime] = None
+
+class CertificadoResponse(CertificadoBase):
+    id: int
+    
+    model_config = ConfigDict(from_attributes=True)

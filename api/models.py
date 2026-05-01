@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, Date, func
+from sqlalchemy import Column, Integer, String, DateTime, Date, func, ForeignKey, Text
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -49,3 +49,13 @@ class HistorialAcceso(Base):
     ip_address = Column(String(45), nullable=False)
     login_time = Column(DateTime(timezone=True), server_default=func.now())
     status = Column(String(10), default="success")
+
+class CertificadoCalibracion(Base):
+    __tablename__ = "certificados_calibracion"
+
+    id = Column(Integer, primary_key=True, index=True)
+    no_certificado = Column(String(50), nullable=False)
+    id_instrumento = Column(Integer, ForeignKey("instrumentacion.id"), nullable=False)
+    estado_tecnico = Column(String(50), nullable=True)
+    observaciones = Column(Text, nullable=True)
+    fecha = Column(DateTime(timezone=True), nullable=True)
