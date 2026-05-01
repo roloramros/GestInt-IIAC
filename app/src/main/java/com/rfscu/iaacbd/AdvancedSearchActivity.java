@@ -134,6 +134,15 @@ public class AdvancedSearchActivity extends ThemeBaseActivity {
                 startActivity(intent);
             } else if (id == R.id.nav_advanced_search) {
                 // Ya estamos aquí
+            } else if (id == R.id.nav_calibration_monthly) {
+                Intent intent = new Intent(this, MonthlyPlansActivity.class);
+                startActivity(intent);
+            } else if (id == R.id.nav_calibration_update) {
+                Intent intent = new Intent(this, UpdateCertsActivity.class);
+                startActivity(intent);
+            } else if (id == R.id.nav_calibration_history) {
+                Intent intent = new Intent(this, CertsHistoryActivity.class);
+                startActivity(intent);
             } else if (id == R.id.nav_user_management) {
                 Intent intent = new Intent(this, UserManagementActivity.class);
                 startActivity(intent);
