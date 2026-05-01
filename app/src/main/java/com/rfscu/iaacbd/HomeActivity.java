@@ -94,7 +94,8 @@ public class HomeActivity extends ThemeBaseActivity {
         });
 
         cardCalibration.setOnClickListener(v -> {
-            Toast.makeText(this, "Módulo de Calibración en desarrollo", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, CalibrationActivity.class);
+            startActivity(intent);
         });
     }
 
