@@ -51,6 +51,11 @@
     <string name="menu_calibration_update">Actualización de Certificados</string>
     <string name="menu_calibration_history">Historial de Certificados</string>
 
+    <!-- Calibration Placeholders -->
+    <string name="placeholder_monthly_plans">Próximamente: Planes Mensuales</string>
+    <string name="placeholder_update_certs">Próximamente: Actualización de Certificados</string>
+    <string name="placeholder_certs_history">Próximamente: Historial de Certificados</string>
+
     <string name="filter_by_user">Filtrar por Usuario</string>
     <string name="filter_by_date">Filtrar por Fecha</string>
     <string name="select_date">Seleccionar Fecha</string>
