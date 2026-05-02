@@ -97,6 +97,7 @@ class CertificadoDetailedResponse(BaseModel):
     estado_tecnico: Optional[str] = None
     observaciones: Optional[str] = None
     fecha: Optional[datetime] = None
+    tag: Optional[str] = None
     no_serie: Optional[str] = None
     instrumento: Optional[str] = None
     descripcion: Optional[str] = None

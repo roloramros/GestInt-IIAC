@@ -30,13 +30,13 @@ public class CertificadoAdapter extends RecyclerView.Adapter<CertificadoAdapter.
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Certificado c = list.get(position);
         holder.tvNoCertificado.setText(c.getNoCertificado());
+        holder.tvFecha.setText(c.getFecha() != null ? c.getFecha().split("T")[0] : "-");
         
-        setupRow(holder.rowSerie, "No. Serie", c.getNoSerie());
+        setupRow(holder.rowTag, "TAG", c.getTag());
         setupRow(holder.rowTipo, "Instrumento", c.getInstrumento());
-        setupRow(holder.rowDesc, "Descripción", c.getDescripcion());
+        setupRow(holder.rowSerie, "No. Serie", c.getNoSerie());
         setupRow(holder.rowRango, "Rango", c.getRango());
         setupRow(holder.rowEstado, "Estado Téc.", c.getEstadoTecnico());
-        setupRow(holder.rowFecha, "Fecha", c.getFecha() != null ? c.getFecha().split("T")[0] : "-");
     }
 
     private void setupRow(View row, String label, String value) {
@@ -48,17 +48,17 @@ public class CertificadoAdapter extends RecyclerView.Adapter<CertificadoAdapter.
     public int getItemCount() { return list.size(); }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvNoCertificado;
-        View rowSerie, rowTipo, rowDesc, rowRango, rowEstado, rowFecha;
+        TextView tvNoCertificado, tvFecha;
+        View rowTag, rowTipo, rowSerie, rowRango, rowEstado;
         ViewHolder(View v) {
             super(v);
             tvNoCertificado = v.findViewById(R.id.tvNoCertificado);
-            rowSerie = v.findViewById(R.id.rowSerie);
+            tvFecha = v.findViewById(R.id.tvFecha);
+            rowTag = v.findViewById(R.id.rowTag);
             rowTipo = v.findViewById(R.id.rowTipo);
-            rowDesc = v.findViewById(R.id.rowDesc);
+            rowSerie = v.findViewById(R.id.rowSerie);
             rowRango = v.findViewById(R.id.rowRango);
             rowEstado = v.findViewById(R.id.rowEstado);
-            rowFecha = v.findViewById(R.id.rowFecha);
         }
     }
 }
