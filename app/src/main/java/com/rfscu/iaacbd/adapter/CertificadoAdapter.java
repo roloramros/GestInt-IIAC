@@ -3,7 +3,9 @@ package com.rfscu.iaacbd.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.rfscu.iaacbd.R;
@@ -37,6 +39,10 @@ public class CertificadoAdapter extends RecyclerView.Adapter<CertificadoAdapter.
         setupRow(holder.rowSerie, "No. Serie", c.getNoSerie());
         setupRow(holder.rowRango, "Rango", c.getRango());
         setupRow(holder.rowEstado, "Estado Téc.", c.getEstadoTecnico());
+
+        holder.btnDownload.setOnClickListener(v -> {
+            Toast.makeText(v.getContext(), "Descargando PDF del certificado: " + c.getNoCertificado(), Toast.LENGTH_SHORT).show();
+        });
     }
 
     private void setupRow(View row, String label, String value) {
@@ -50,6 +56,7 @@ public class CertificadoAdapter extends RecyclerView.Adapter<CertificadoAdapter.
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvNoCertificado, tvFecha;
         View rowTag, rowTipo, rowSerie, rowRango, rowEstado;
+        ImageButton btnDownload;
         ViewHolder(View v) {
             super(v);
             tvNoCertificado = v.findViewById(R.id.tvNoCertificado);
@@ -59,6 +66,7 @@ public class CertificadoAdapter extends RecyclerView.Adapter<CertificadoAdapter.
             rowSerie = v.findViewById(R.id.rowSerie);
             rowRango = v.findViewById(R.id.rowRango);
             rowEstado = v.findViewById(R.id.rowEstado);
+            btnDownload = v.findViewById(R.id.btnDownload);
         }
     }
 }
