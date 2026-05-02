@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.rfscu.iaacbd.adapter.CertificadoAdapter;
 import com.rfscu.iaacbd.api.RetrofitClient;
 import com.rfscu.iaacbd.model.Certificado;
@@ -29,6 +30,7 @@ public class CertsHistoryFragment extends Fragment {
     private ProgressBar pb;
     private TextView tvEmpty;
     private EditText etSearch;
+    private SwipeRefreshLayout swipeRefresh;
 
     @Nullable
     @Override
@@ -43,12 +45,17 @@ public class CertsHistoryFragment extends Fragment {
         pb = view.findViewById(R.id.progressBar);
         tvEmpty = view.findViewById(R.id.tvEmpty);
         etSearch = view.findViewById(R.id.etSearch);
+        swipeRefresh = view.findViewById(R.id.swipeRefresh);
 
         adapter = new CertificadoAdapter();
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
         rv.setAdapter(adapter);
 
         loadCertificados(null);
+
+        swipeRefresh.setOnRefreshListener(() -> {
+            loadCertificados(etSearch.getText().toString());
+        });
 
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -69,6 +76,7 @@ public class CertsHistoryFragment extends Fragment {
             public void onResponse(Call<List<Certificado>> call, Response<List<Certificado>> response) {
                 if (!isAdded()) return;
                 pb.setVisibility(View.GONE);
+                swipeRefresh.setRefreshing(false);
                 if (response.isSuccessful() && response.body() != null) {
                     List<Certificado> list = response.body();
                     adapter.setList(list);
@@ -82,6 +90,7 @@ public class CertsHistoryFragment extends Fragment {
             public void onFailure(Call<List<Certificado>> call, Throwable t) {
                 if (!isAdded()) return;
                 pb.setVisibility(View.GONE);
+                swipeRefresh.setRefreshing(false);
                 Toast.makeText(getContext(), "Fallo de conexión", Toast.LENGTH_SHORT).show();
             }
         });

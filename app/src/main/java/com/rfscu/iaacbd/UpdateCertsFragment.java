@@ -16,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.rfscu.iaacbd.api.RetrofitClient;
 import com.rfscu.iaacbd.model.Certificado;
 import com.rfscu.iaacbd.model.CertificadoRequest;
@@ -34,6 +35,7 @@ public class UpdateCertsFragment extends Fragment {
     private EditText etNoCertificado, etFecha, etObservaciones;
     private AutoCompleteTextView spinnerEstado;
     private ProgressBar progressBar;
+    private SwipeRefreshLayout swipeRefresh;
 
     private List<Instrumento> allInstruments = new ArrayList<>();
     private Instrumento selectedInstrument = null;
@@ -52,6 +54,11 @@ public class UpdateCertsFragment extends Fragment {
         setupDatePicker();
         loadInstruments();
 
+        swipeRefresh.setOnRefreshListener(() -> {
+            limpiarFormulario();
+            loadInstruments();
+        });
+
         btnCargar.setOnClickListener(v -> cargarDetalles());
         btnActualizar.setOnClickListener(v -> guardarCertificado());
     }
@@ -68,6 +75,7 @@ public class UpdateCertsFragment extends Fragment {
         etObservaciones = v.findViewById(R.id.etObservaciones);
         spinnerEstado = v.findViewById(R.id.spinnerEstado);
         progressBar = v.findViewById(R.id.progressBar);
+        swipeRefresh = v.findViewById(R.id.swipeRefresh);
 
         setupRowLabel(rowTag, "TAG");
         setupRowLabel(rowTipo, "Instrumento");
@@ -102,6 +110,7 @@ public class UpdateCertsFragment extends Fragment {
             public void onResponse(Call<List<Instrumento>> call, Response<List<Instrumento>> response) {
                 if (!isAdded()) return;
                 progressBar.setVisibility(View.GONE);
+                swipeRefresh.setRefreshing(false);
                 if (response.isSuccessful() && response.body() != null) {
                     allInstruments = response.body();
                     List<String> series = new ArrayList<>();
@@ -119,6 +128,7 @@ public class UpdateCertsFragment extends Fragment {
             public void onFailure(Call<List<Instrumento>> call, Throwable t) {
                 if (!isAdded()) return;
                 progressBar.setVisibility(View.GONE);
+                swipeRefresh.setRefreshing(false);
                 Toast.makeText(getContext(), "Error al cargar instrumentos", Toast.LENGTH_SHORT).show();
             }
         });
