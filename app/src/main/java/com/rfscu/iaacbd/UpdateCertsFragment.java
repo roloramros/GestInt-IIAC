@@ -181,7 +181,19 @@ public class UpdateCertsFragment extends Fragment {
                     Toast.makeText(getContext(), "Certificado actualizado con éxito", Toast.LENGTH_SHORT).show();
                     limpiarFormulario();
                 } else {
-                    Toast.makeText(getContext(), "Error al guardar el certificado", Toast.LENGTH_SHORT).show();
+                    String errorMsg = "Error al guardar";
+                    try {
+                        if (response.errorBody() != null) {
+                            String errorBody = response.errorBody().string();
+                            if (errorBody.contains("detail")) {
+                                // Simple extraction for now
+                                errorMsg = errorBody.split("\"detail\":\"")[1].split("\"")[0];
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    Toast.makeText(getContext(), errorMsg, Toast.LENGTH_LONG).show();
                 }
             }
 

@@ -54,7 +54,7 @@ class CertificadoCalibracion(Base):
     __tablename__ = "certificados_calibracion"
 
     id = Column(Integer, primary_key=True, index=True)
-    no_certificado = Column(String(50), nullable=False)
+    no_certificado = Column(String(50), unique=True, nullable=False)
     id_instrumento = Column(Integer, ForeignKey("instrumentacion.id"), nullable=False)
     estado_tecnico = Column(String(50), nullable=True)
     observaciones = Column(Text, nullable=True)

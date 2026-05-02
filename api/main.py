@@ -2,6 +2,7 @@ from fastapi import FastAPI, Depends, HTTPException, status, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy import select, func, or_
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from pydantic import BaseModel, ConfigDict
 from datetime import datetime, timedelta, timezone, date
@@ -233,7 +234,14 @@ async def create_certificado(
     
     nuevo_cert = CertificadoCalibracion(**certificado.model_dump())
     db.add(nuevo_cert)
-    await db.commit()
+    try:
+        await db.commit()
+    except IntegrityError:
+        await db.rollback()
+        raise HTTPException(
+            status_code=400,
+            detail="El número de certificado ya existe. Debe ser único."
+        )
     await db.refresh(nuevo_cert)
     return nuevo_cert
 
