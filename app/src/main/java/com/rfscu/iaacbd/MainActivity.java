@@ -85,9 +85,9 @@ public class MainActivity extends ThemeBaseActivity implements InstrumentoFormDi
         androidx.core.view.WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         View mainContent = findViewById(R.id.main);
         androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(mainContent, (v, insets) -> {
-            androidx.core.graphics.Insets bars = insets.getInsets(androidx.core.view.WindowInsetsCompat.Type.systemBars());
+            androidx.core.graphics.Insets bars = insets.getInsets(androidx.core.view.WindowInsetsCompat.Type.systemBars() | androidx.core.view.WindowInsetsCompat.Type.ime());
             v.setPadding(bars.left, bars.top, bars.right, bars.bottom);
-            return androidx.core.view.WindowInsetsCompat.CONSUMED;
+            return insets;
         });
     }
 

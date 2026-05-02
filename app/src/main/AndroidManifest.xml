@@ -30,7 +30,8 @@
             android:theme="@style/Theme.IAACBD" />
         <activity
             android:name=".MainActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".InstrumentoDetailActivity"
             android:exported="false"
@@ -46,7 +47,8 @@
         <activity
             android:name=".CalibrationActivity"
             android:exported="false"
-            android:theme="@style/Theme.IAACBD" />
+            android:theme="@style/Theme.IAACBD"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".Login"
             android:exported="false"
