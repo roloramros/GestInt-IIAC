@@ -28,7 +28,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class UpdateCertsFragment extends Fragment {
-    private AutoCompleteTextView acInstrumentoId;
+    private AutoCompleteTextView acNoSerie;
     private Button btnCargar, btnActualizar;
     private View rowTag, rowTipo, rowRango;
     private EditText etNoCertificado, etFecha, etObservaciones;
@@ -57,7 +57,7 @@ public class UpdateCertsFragment extends Fragment {
     }
 
     private void initViews(View v) {
-        acInstrumentoId = v.findViewById(R.id.acInstrumentoId);
+        acNoSerie = v.findViewById(R.id.acNoSerie);
         btnCargar = v.findViewById(R.id.btnCargar);
         btnActualizar = v.findViewById(R.id.btnActualizar);
         rowTag = v.findViewById(R.id.rowTag);
@@ -104,12 +104,14 @@ public class UpdateCertsFragment extends Fragment {
                 progressBar.setVisibility(View.GONE);
                 if (response.isSuccessful() && response.body() != null) {
                     allInstruments = response.body();
-                    List<String> ids = new ArrayList<>();
+                    List<String> series = new ArrayList<>();
                     for (Instrumento i : allInstruments) {
-                        ids.add(String.valueOf(i.getId()));
+                        if (i.getNoSerie() != null && !i.getNoSerie().isEmpty()) {
+                            series.add(i.getNoSerie());
+                        }
                     }
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, ids);
-                    acInstrumentoId.setAdapter(adapter);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, series);
+                    acNoSerie.setAdapter(adapter);
                 }
             }
 
@@ -123,13 +125,12 @@ public class UpdateCertsFragment extends Fragment {
     }
 
     private void cargarDetalles() {
-        String idStr = acInstrumentoId.getText().toString();
-        if (TextUtils.isEmpty(idStr)) return;
+        String serieStr = acNoSerie.getText().toString();
+        if (TextUtils.isEmpty(serieStr)) return;
 
         selectedInstrument = null;
-        int id = Integer.parseInt(idStr);
         for (Instrumento i : allInstruments) {
-            if (i.getId() == id) {
+            if (serieStr.equalsIgnoreCase(i.getNoSerie())) {
                 selectedInstrument = i;
                 break;
             }
@@ -194,7 +195,7 @@ public class UpdateCertsFragment extends Fragment {
     }
 
     private void limpiarFormulario() {
-        acInstrumentoId.setText("");
+        acNoSerie.setText("");
         etNoCertificado.setText("");
         etFecha.setText("");
         etObservaciones.setText("");
