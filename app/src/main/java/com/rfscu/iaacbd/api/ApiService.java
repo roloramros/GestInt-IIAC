@@ -4,6 +4,7 @@ import com.rfscu.iaacbd.model.Instrumento;
 import com.rfscu.iaacbd.model.InstrumentoCreateRequest;
 import com.rfscu.iaacbd.model.InstrumentoUpdateRequest;
 import com.rfscu.iaacbd.model.Certificado;
+import com.rfscu.iaacbd.model.CertificadoRequest;
 import com.rfscu.iaacbd.model.HistorialAcceso;
 import com.rfscu.iaacbd.model.LoginRequest;
 import com.rfscu.iaacbd.model.LoginResponse;
@@ -70,4 +71,7 @@ public interface ApiService {
         @retrofit2.http.Query("no_certificado") String noCertificado,
         @retrofit2.http.Query("no_serie") String noSerie
     );
+
+    @POST("/certificados")
+    Call<Certificado> createCertificado(@Body CertificadoRequest request);
 }

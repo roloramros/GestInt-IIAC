@@ -218,6 +218,25 @@ async def get_certificados(
         ))
     return certs
 
+@app.post("/certificados", response_model=schemas.CertificadoResponse, status_code=201)
+async def create_certificado(
+    certificado: schemas.CertificadoCreate,
+    db: AsyncSession = Depends(get_db),
+    current_user: Usuario = Depends(get_current_user)
+):
+    from models import CertificadoCalibracion, Instrumento
+    
+    # Verificar que el instrumento existe
+    instr = await db.get(Instrumento, certificado.id_instrumento)
+    if not instr:
+        raise HTTPException(status_code=404, detail="Instrumento no encontrado")
+    
+    nuevo_cert = CertificadoCalibracion(**certificado.model_dump())
+    db.add(nuevo_cert)
+    await db.commit()
+    await db.refresh(nuevo_cert)
+    return nuevo_cert
+
 # ==========================================
 # CRUD USUARIOS (Solo Admin)
 # ==========================================
