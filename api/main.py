@@ -232,7 +232,12 @@ async def create_certificado(
     if not instr:
         raise HTTPException(status_code=404, detail="Instrumento no encontrado")
     
-    nuevo_cert = CertificadoCalibracion(**certificado.model_dump())
+    # Asegurar que la fecha tenga zona horaria si se proporciona
+    cert_data = certificado.model_dump()
+    if cert_data.get("fecha") and cert_data["fecha"].tzinfo is None:
+        cert_data["fecha"] = cert_data["fecha"].replace(tzinfo=timezone.utc)
+        
+    nuevo_cert = CertificadoCalibracion(**cert_data)
     db.add(nuevo_cert)
     try:
         await db.commit()
