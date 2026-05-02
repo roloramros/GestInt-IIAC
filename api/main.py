@@ -236,11 +236,15 @@ async def create_certificado(
     db.add(nuevo_cert)
     try:
         await db.commit()
-    except IntegrityError:
+    except Exception as e:
         await db.rollback()
+        print(f"Error al crear certificado: {str(e)}")
+        detail = "El número de certificado ya existe o hay un error de datos."
+        if "unique" in str(e).lower():
+            detail = "El número de certificado ya existe. Debe ser único."
         raise HTTPException(
             status_code=400,
-            detail="El número de certificado ya existe. Debe ser único."
+            detail=f"{detail} (Error: {str(e)})"
         )
     await db.refresh(nuevo_cert)
     return nuevo_cert
