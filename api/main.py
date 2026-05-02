@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Depends, HTTPException, status, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer
-from sqlalchemy import select, func
+from sqlalchemy import select, func, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 from pydantic import BaseModel, ConfigDict
 from datetime import datetime, timedelta, timezone, date
@@ -191,10 +191,13 @@ async def get_certificados(
         Instrumento.rango
     ).join(Instrumento, CertificadoCalibracion.id_instrumento == Instrumento.id)
 
-    if no_certificado:
-        stmt = stmt.where(CertificadoCalibracion.no_certificado.ilike(f"%{no_certificado}%"))
-    if no_serie:
-        stmt = stmt.where(Instrumento.no_serie.ilike(f"%{no_serie}%"))
+    if no_certificado or no_serie:
+        filters = []
+        if no_certificado:
+            filters.append(CertificadoCalibracion.no_certificado.ilike(f"%{no_certificado}%"))
+        if no_serie:
+            filters.append(Instrumento.no_serie.ilike(f"%{no_serie}%"))
+        stmt = stmt.where(or_(*filters))
 
     result = await db.execute(stmt.order_by(CertificadoCalibracion.fecha.desc()))
     
